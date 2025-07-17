@@ -1,0 +1,190 @@
+import React, { useState, useRef } from "react";
+import { FaChevronLeft, FaChevronRight, FaUser } from "react-icons/fa";
+import { Link } from "react-router-dom";
+
+const slugify = (text) =>
+  text
+    .toLowerCase()
+    .replace(/ /g, "-")
+    .replace(/[^\w-]+/g, "");
+
+export default function News() {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const scrollContainerRef = useRef(null);
+
+  const newsItems = [
+    {
+      id: 1,
+      type: "Up Coming Event",
+      title: "Strengthening Microfinance Institutions in Nigeria",
+      description:
+        "Stay updated with the latest developments in the Nigerian microfinance sector and COMCIN activities.",
+      author: "Author Name",
+      date: "28 Jun 2025",
+      readTime: "7 min read",
+      image:
+        "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=1226&q=80",
+      typeColor: "bg-green-600",
+    },
+    {
+      id: 2,
+      type: "Past Event",
+      title: "COMCIN Annual Conference 2025",
+      description:
+        "Stay updated with the latest developments in the Nigerian microfinance sector and COMCIN activities.",
+      author: "Author Name",
+      date: "28 Jun 2025",
+      readTime: "7 min read",
+      image:
+        "https://images.unsplash.com/photo-1591115765373-5207764f72e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+      typeColor: "bg-green-600",
+    },
+    {
+      id: 3,
+      type: "Update",
+      title: "New Regulatory Guidelines for Microfinance Banks",
+      description:
+        "Stay updated with the latest developments in the Nigerian microfinance sector and COMCIN activities.",
+      author: "Author Name",
+      date: "28 Jun 2025",
+      readTime: "7 min read",
+      image:
+        "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1171&q=80",
+      typeColor: "bg-green-600",
+    },
+    {
+      id: 4,
+      type: "Update",
+      title: "Digital Innovation in Microfinance",
+      description:
+        "Stay updated with the latest developments in the Nigerian microfinance sector and COMCIN activities.",
+      author: "Author Name",
+      date: "15 Jun 2025",
+      readTime: "5 min read",
+      image:
+        "https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-4.0.3&auto=format&fit=crop&w=1074&q=80",
+      typeColor: "bg-green-600",
+    },
+  ];
+
+  const scrollToIndex = (index) => {
+    if (scrollContainerRef.current) {
+      const container = scrollContainerRef.current;
+      const cardWidth = container.children[0]?.clientWidth || 0;
+      const gap = 16;
+      const scrollPosition = index * (cardWidth + gap);
+
+      container.scrollTo({
+        left: scrollPosition,
+        behavior: "smooth",
+      });
+      setCurrentIndex(index);
+    }
+  };
+
+  const scrollLeft = () => {
+    const newIndex = currentIndex > 0 ? currentIndex - 1 : newsItems.length - 1;
+    scrollToIndex(newIndex);
+  };
+
+  const scrollRight = () => {
+    const newIndex = currentIndex < newsItems.length - 1 ? currentIndex + 1 : 0;
+    scrollToIndex(newIndex);
+  };
+
+  return (
+    <section id="news" className="py-16">
+      <div className="container mx-auto px-4 max-w-7xl">
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h2 className="font-maven text-4xl font-bold [text-[#1E1E1E] mb-4">
+              News & Announcements
+            </h2>
+            <p className="text-lg text-gray-600 max-w-md">
+              Stay updated with the latest developments in the Nigerian
+              microfinance sector and COMCIN activities.
+            </p>
+          </div>
+
+          <div className="hidden md:flex space-x-2">
+            <button
+              onClick={scrollLeft}
+              className="p-3 rounded-full border border-green-600 bg-white hover:bg-gray-50 transition-colors duration-200 group"
+              aria-label="Previous news item"
+            >
+              <FaChevronLeft className="w-5 h-5 text-green-600" />
+            </button>
+            <button
+              onClick={scrollRight}
+              className="p-3 rounded-full bg-green-600 hover:bg-green-700 transition-colors duration-200 text-white"
+              aria-label="Next news item"
+            >
+              <FaChevronRight className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+
+        <div className="relative">
+          <div
+            ref={scrollContainerRef}
+            className="flex overflow-x-auto scrollbar-hide space-x-4 pb-4 snap-x snap-mandatory"
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          >
+            {newsItems.map((item) => (
+              <div
+                key={item.id}
+                className="flex-shrink-0 w-full md:w-[400px] snap-start"
+              >
+                <div className="bg-white pb-5 rounded-2xl shadow-md overflow-hidden transition-shadow duration-300 group h-full">
+                  <div className="h-48 p-2 overflow-hidden">
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="w-full h-full rounded-2xl object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  </div>
+
+                  <div className="px-2 mt-4 pr-6">
+                    <span
+                      className={`${item.typeColor} text-white px-3 py-1 my-3 rounded-md text-sm font-medium`}
+                    >
+                      {item.type}
+                    </span>
+                    <Link to={`/news/${slugify(item.title)}`}>
+                      <h3 className="text-xl font-bold text-gray-900 my-3 line-clamp-2 group-hover:text-green-600 transition-colors duration-200">
+                        {item.title.split(" ").slice(0, 2).join(" ")}...
+                      </h3>
+                    </Link>
+                    <p className="text-gray-600 mb-4 line-clamp-3 leading-relaxed">
+                      {item.description}
+                    </p>
+
+                    <div className="flex items-center justify-between pt-4 border-gray-100">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center">
+                          <FaUser className="w-8 h-8 text-gray-500" />
+                        </div>
+                        <div className="flex flex-col space-x-3 text-sm text-[#1E1E1E]">
+                          {item.author}
+                          <div className="flex items-center space-x-1">
+                            <span>{item.date}</span> .
+                            <span>{item.readTime}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="w-full md:w-auto flex justify-end">
+          <button className="bg-green-700 text-white px-6 py-2 rounded-md font-semibold transition-colors">
+            View All News{" "}
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
