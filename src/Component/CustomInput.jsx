@@ -20,7 +20,7 @@ export default function CustomInput({
         type={type}
         {...register(name, { required })}
         placeholder={placeholder}
-        className={`w-full border border-gray-300 text-sm rounded-md px-3 py-2 ${className}`}
+        className={`w-full border border-gray-300 text-sm rounded-md px-3 py-2 focus:outline-none ${className}`}
         {...rest}
       />
       {errors[name] && (
@@ -29,4 +29,3 @@ export default function CustomInput({
     </div>
   );
 }
-

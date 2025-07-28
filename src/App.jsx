@@ -14,6 +14,14 @@ import MyInstitution from "./Pages/MyInstitution";
 import Finacials from "./Pages/Finacials";
 import Certificates from "./Pages/Certificates";
 import Support from "./Pages/Support";
+import AdminLayout from "./Component/AdminLayout";
+import AdminDashboard from "./Pages/Admin/AdminDashboard";
+import MembershipApplications from "./Pages/Admin/MembershipApplications";
+import InstitutionManagemment from "./Pages/Admin/InstitutionManagemment";
+import AdminUsers from "./Pages/Admin/AdminUsers";
+import Settings from "./Pages/Admin/Settings";
+import AdminFinacials from "./Pages/Admin/AdminFinacials";
+import ReportAndAnalitics from "./Pages/Admin/ReportAndAnalitics";
 
 export default function App() {
   return (
@@ -35,6 +43,19 @@ export default function App() {
           <Route path="finacials" element={<Finacials />} />
           <Route path="certificates" element={<Certificates />} />
           <Route path="support" element={<Support />} />
+        </Route>
+
+        <Route path="/admin-dashboard" element={<AdminLayout />}>
+          <Route index element={<AdminDashboard />} />
+          <Route path="memberships" element={<MembershipApplications />} />
+          <Route path="institutions" element={<InstitutionManagemment />} />
+          <Route path="financials" element={<AdminFinacials />} />
+          <Route path="reports" element={<ReportAndAnalitics />} />
+          <Route path="content" element={<MembershipApplications />} />
+          <Route path="users" element={<AdminUsers />} />
+          <Route path="settings" element={<Settings />} />
+
+       
         </Route>
       </Routes>
     </Router>
