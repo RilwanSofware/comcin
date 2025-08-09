@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import logo from "../assets/logogreen.png";
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { useLoginMutation } from "@/services/auth";
+import toast from "react-hot-toast";
+
+
 
 const slides = [
   {
@@ -22,6 +27,15 @@ const slides = [
 
 export default function Login() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [login, { isLoading }] = useLoginMutation();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+
 
   // Auto-slide every 6 seconds
   useEffect(() => {
@@ -30,6 +44,29 @@ export default function Login() {
     }, 6000);
     return () => clearInterval(timer);
   }, []);
+
+
+
+  const onSubmit = async (data) => {
+    try {
+      const result = await login({
+        email: data.email,
+        password: data.password,
+      }).unwrap();
+      sessionStorage.setItem("token", result.token);
+      sessionStorage.setItem("user", JSON.stringify(result.user));
+      console.log(result)
+      toast.success(result?.message);
+      if (result.user.role === "admin") {
+        window.location.href = "/admin-dashboard";
+      } else {
+        window.location.href = "/dashboard";
+      }
+    } catch (err) {
+      console.error("Login failed:", err);
+      toast.error(err?.data?.message)
+    }
+  };
 
   return (
     <section className="bg-[#064A14] flex items-center justify-center min-h-screen p-4">
@@ -60,9 +97,8 @@ export default function Login() {
             {slides.map((_, index) => (
               <span
                 key={index}
-                className={`w-2 h-2 rounded-full ${
-                  currentSlide === index ? "bg-white" : "bg-white/50"
-                }`}
+                className={`w-2 h-2 rounded-full ${currentSlide === index ? "bg-white" : "bg-white/50"
+                  }`}
               ></span>
             ))}
           </div>
@@ -90,18 +126,27 @@ export default function Login() {
               </p>
             </div>
 
-            <form className=" w-full lg:w-2/3 border border-[#E9EEEA] rounded-md p-4 space-y-5">
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+
+              className=" w-full lg:w-2/3 border border-[#E9EEEA] rounded-md p-4 space-y-5">
               <div>
                 <label className="block text-gray-700 text-sm font-bold mb-2">
                   Registration ID
                 </label>
                 <input
-                  type="email"
-                  placeholder="golymaurdyo@belugateam.info"
-                  value=""
-                  readOnly
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#064A14]"
+                  type="text"
+                  placeholder="Enter your registration ID"
+                  {...register("email", {
+                    required: "Email is required",
+                  })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none"
                 />
+                {errors.email && (
+                  <p className="text-red-500 text-xs mt-2">
+                    {errors.email.message}
+                  </p>
+                )}
               </div>
 
               <div>
@@ -111,16 +156,23 @@ export default function Login() {
                 <input
                   type="password"
                   placeholder="********"
-                  value=""
-                  readOnly
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#064A14]"
+                  {...register("password", {
+                    required: "Password is required",
+                  })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md outline-none"
                 />
+                {errors.password && (
+                  <p className="text-red-500 text-xs mt-2">
+                    {errors.password.message}
+                  </p>
+                )}
               </div>
 
               <div className="flex items-center">
                 <input
                   type="checkbox"
                   id="remember-me"
+                  {...register("rememberMe")}
                   className="h-4 w-4 text-[#064A14] border-gray-300 rounded"
                 />
                 <label
@@ -131,11 +183,13 @@ export default function Login() {
                 </label>
               </div>
 
+
               <button
                 type="submit"
-                className="w-full bg-[#0A8625] mb-4 hover:bg-[#053710] border border-[#8EC79B] text-white font-semibold py-2 px-4 rounded-md transition"
+                disabled={isLoading}
+                className="cursor-pointer w-full bg-[#0A8625] mb-4 hover:bg-[#053710] border border-[#8EC79B] text-white font-semibold py-2 px-4 rounded-md transition"
               >
-                Log In
+                {isLoading ? "Logging in..." : "Log In"}
               </button>
               <div className="flex justify-center">
                 <Link

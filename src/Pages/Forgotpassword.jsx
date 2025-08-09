@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import logo from "../assets/logogreen.png";
 import lock from "../assets/lock.svg";
 import mail from "../assets/mailconfirm.svg";
+import { useForm } from "react-hook-form";
+
 
 
 import { Link } from "react-router-dom";
@@ -27,6 +29,14 @@ const slides = [
 export default function ForgotPassword() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [showConfirmation, setShowConfirmation] = useState(false);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    reset
+  } = useForm();
+
 
   // Auto-slide every 6 seconds
   useEffect(() => {

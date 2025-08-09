@@ -22,6 +22,8 @@ import AdminUsers from "./Pages/Admin/AdminUsers";
 import Settings from "./Pages/Admin/Settings";
 import AdminFinacials from "./Pages/Admin/AdminFinacials";
 import ReportAndAnalitics from "./Pages/Admin/ReportAndAnalitics";
+import RequireAuth from "./Component/RequireAuth";
+import GuestRoute from "./Component/GuestRoute";
 
 export default function App() {
   return (
@@ -32,12 +34,49 @@ export default function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/members" element={<MembersDirectory />} />
         <Route path="/news" element={<News />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
 
-        <Route path="/dashboard" element={<AuthenticatedLayout />}>
+        {/* Guest-only routes */}
+        <Route
+          path="/login"
+          element={
+            <GuestRoute>
+              <Login />
+            </GuestRoute>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <GuestRoute>
+              <Register />
+            </GuestRoute>
+          }
+        />
+        <Route
+          path="/forgot-password"
+          element={
+            <GuestRoute>
+              <ForgotPassword />
+            </GuestRoute>
+          }
+        />
+        <Route
+          path="/reset-password"
+          element={
+            <GuestRoute>
+              <ResetPassword />
+            </GuestRoute>
+          }
+        />
+
+        <Route
+          path="/dashboard"
+          element={
+            <RequireAuth role="member">
+              <AuthenticatedLayout />
+            </RequireAuth>
+          }
+        >
           <Route index element={<MemberDashboard />} />
           <Route path="institution" element={<MyInstitution />} />
           <Route path="finacials" element={<Finacials />} />
@@ -45,7 +84,14 @@ export default function App() {
           <Route path="support" element={<Support />} />
         </Route>
 
-        <Route path="/admin-dashboard" element={<AdminLayout />}>
+        <Route
+          path="/admin-dashboard"
+          element={
+            <RequireAuth role="admin">
+              <AdminLayout />
+            </RequireAuth>
+          }
+        >
           <Route index element={<AdminDashboard />} />
           <Route path="memberships" element={<MembershipApplications />} />
           <Route path="institutions" element={<InstitutionManagemment />} />
@@ -54,8 +100,6 @@ export default function App() {
           <Route path="content" element={<MembershipApplications />} />
           <Route path="users" element={<AdminUsers />} />
           <Route path="settings" element={<Settings />} />
-
-       
         </Route>
       </Routes>
     </Router>
