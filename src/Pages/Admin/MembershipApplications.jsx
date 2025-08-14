@@ -2,8 +2,13 @@ import MembershipTable from "@/Component/Admin/Membership/MembershipTable";
 import MemberStatCard from "@/Component/Admin/Membership/MemberStatCard";
 import React from "react";
 import { LuArrowDownToLine } from "react-icons/lu";
+import { useGetAdminMembershipsQuery } from "@/services/admin-dashboard/dashboard";
 
 export default function MembershipApplications() {
+  const { data } = useGetAdminMembershipsQuery();
+
+  console.log(data);
+  
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-start sm:justify-between sm:items-center">

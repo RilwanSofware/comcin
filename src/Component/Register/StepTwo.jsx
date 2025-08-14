@@ -29,7 +29,7 @@ export default function StepTwo({ register, errors }) {
 
       <CustomInput
         label="Full Name"
-        name="fullName"
+        name="full_name"
         register={register}
         required={true}
         placeholder="Enter full name"
@@ -38,7 +38,7 @@ export default function StepTwo({ register, errors }) {
 
       <CustomInput
         label="Position"
-        name="position"
+        name="designation"
         register={register}
         required={true}
         placeholder="e.g. Managing Director"
@@ -47,7 +47,7 @@ export default function StepTwo({ register, errors }) {
 
       <CustomInput
         label="Official Email"
-        name="email"
+        name="official_email"
         type="email"
         register={register}
         required={true}
@@ -57,7 +57,7 @@ export default function StepTwo({ register, errors }) {
 
       <CustomInput
         label="Phone Number"
-        name="phone"
+        name="phone_number"
         type="tel"
         register={register}
         required={true}
@@ -67,7 +67,7 @@ export default function StepTwo({ register, errors }) {
 
       <CustomFileUpload
         label="Upload Means of ID"
-        name="meansOfId"
+        name="id_card"
         register={register}
         required={true}
         errors={errors}

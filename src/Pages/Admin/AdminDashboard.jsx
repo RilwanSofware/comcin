@@ -4,9 +4,15 @@ import PaymentOverview from "@/Component/Admin/PaymentOverview";
 import InstitutionStatus from "@/Component/Admin/InstitutionStatus";
 import RecentActivity from "@/Component/Admin/RecentActivity";
 import { LuArrowDownToLine } from "react-icons/lu";
-import { BiBuildings } from "react-icons/bi";
+import { useGetDashboardQuery } from "@/services/admin-dashboard/dashboard";
+
 
 export default function AdminDashboard() {
+  const { data:dashboard, error, isLoading } = useGetDashboardQuery();
+
+
+  console.log(dashboard, "dashboard")
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-start sm:justify-between sm:items-center">

@@ -1,18 +1,16 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 // A helper to get the token from localStorage
-const getToken = () => localStorage.getItem('token');
-
-
+const getToken = () => localStorage.getItem("token");
 
 export const authApi = createApi({
-  reducerPath: 'authApi',
+  reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: 'http://backend.comcin.com.ng/api/v1',
+    baseUrl: "https://backend.comcin.com.ng/api/v1",
     prepareHeaders: (headers) => {
       const token = getToken();
       if (token) {
-        headers.set('Authorization', `Bearer ${token}`);
+        headers.set("Authorization", `Bearer ${token}`);
       }
       return headers;
     },
@@ -20,8 +18,15 @@ export const authApi = createApi({
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (data) => ({
-        url: '/login',
-        method: 'POST',
+        url: "/login",
+        method: "POST",
+        body: data,
+      }),
+    }),
+    createAccount: builder.mutation({
+      query: (data) => ({
+        url: "/register",
+        method: "POST",
         body: data,
       }),
     }),
@@ -32,10 +37,23 @@ export const authApi = createApi({
         body: data,
       }),
     }),
+    VerifyAccount: builder.query({
+      query: ({ user_uuid, otp }) => ({
+        url: `/verify-email/${user_uuid}/${otp}`,
+        method: "GET",
+      }),
+    }),
+
     getProfile: builder.query({
-      query: () => 'auth/profile',
+      query: () => "auth/profile",
     }),
   }),
 });
 
-export const { useLoginMutation, useGetProfileQuery } = authApi;
+export const {
+  useLoginMutation,
+  useForgotPasswordMutation,
+  useGetProfileQuery,
+  useCreateAccountMutation,
+  useLazyVerifyAccountQuery,
+} = authApi;

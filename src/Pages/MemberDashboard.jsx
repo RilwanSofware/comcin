@@ -4,8 +4,12 @@ import SummaryCardGrid from "../Component/Dashboard/SummaryCardGrid";
 import MemberStatusCard from "../Component/Dashboard/MemberStatusCard";
 import PendingLevies from "../Component/Dashboard/PendingLevies";
 import NotificationsList from "../Component/Dashboard/NotificationsList";
+import { useGetMemberDashboardQuery } from "@/services/members/dashboardmember";
 
 export default function MemberDashboard() {
+  const { data:lekan, error, isLoading } = useGetMemberDashboardQuery();
+  console.log({ lekan, error, isLoading });
+
   const pendingLevies = Array(4).fill({
     name: "Annual Membership Levy",
     amount: "5000.00",

@@ -8,6 +8,8 @@ import StepFormLayout from "../Component/Register/StepFormLayout";
 import StepOne from "../Component/Register/StepOne";
 import StepTwo from "../Component/Register/StepTwo";
 import StepThree from "../Component/Register/StepThree";
+import { useCreateAccountMutation } from "@/services/auth";
+import toast from "react-hot-toast";
 
 const slides = [
   {
@@ -28,6 +30,7 @@ const slides = [
 ];
 
 export default function Register() {
+  const [Register, { isLoading }] = useCreateAccountMutation();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [step, setStep] = useState(1);
@@ -38,9 +41,34 @@ export default function Register() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log("Submitted Data:", data);
-    setShowConfirmation(true);
+  const onSubmit = async (data) => {
+    try {
+      const formDataToSend = new FormData();
+
+      Object.entries(data).forEach(([key, value]) => {
+        if (value instanceof FileList) {
+          Array.from(value).forEach((file) => {
+            formDataToSend.append(key, file);
+          });
+        } else {
+          formDataToSend.append(key, value);
+        }
+      });
+
+      await Register(formDataToSend).unwrap();
+
+      toast.success(
+        "Registration successful! Please check your email to confirm."
+      );
+      setShowConfirmation(true);
+    } catch (err) {
+      console.error("API Error:", err);
+      toast.error(
+        err?.data?.message ||
+          err?.message ||
+          "Something went wrong while registering."
+      );
+    }
   };
 
   const handleChange = (e) => {
@@ -186,9 +214,12 @@ export default function Register() {
                     {step === 3 && (
                       <button
                         type="submit"
+                        disabled={isLoading}
                         className="bg-[#0A8625] text-white px-6 py-2 rounded"
                       >
-                        Complete Registration
+                        {isLoading
+                          ? "Completing Registration..."
+                          : "Complete Registration"}
                       </button>
                     )}
                   </div>

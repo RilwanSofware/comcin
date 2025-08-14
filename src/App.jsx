@@ -24,6 +24,7 @@ import AdminFinacials from "./Pages/Admin/AdminFinacials";
 import ReportAndAnalitics from "./Pages/Admin/ReportAndAnalitics";
 import RequireAuth from "./Component/RequireAuth";
 import GuestRoute from "./Component/GuestRoute";
+import Verify from "./Pages/Verify";
 
 export default function App() {
   return (
@@ -57,6 +58,14 @@ export default function App() {
           element={
             <GuestRoute>
               <ForgotPassword />
+            </GuestRoute>
+          }
+        />
+        <Route
+          path="/verify/:id/:code"
+          element={
+            <GuestRoute>
+              <Verify />
             </GuestRoute>
           }
         />

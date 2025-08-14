@@ -33,7 +33,7 @@ export default function StepOne({ register, errors, watch }) {
 
       <CustomInput
         label="Institution Name"
-        name="institutionName"
+        name="institution_name"
         register={register}
         required
         placeholder="Enter your institution’s full legal name"
@@ -45,18 +45,18 @@ export default function StepOne({ register, errors, watch }) {
           Institution Type <span className="text-red-500">*</span>
         </label>
         <div className="flex space-x-4">
-          {["Microfinance Bank", "Cooperative", "Other"].map((type) => (
+          {["Microfinance", "Cooperative", "Other"].map((type) => (
             <label key={type} className="flex items-center gap-2">
               <input
                 type="radio"
                 value={type}
-                {...register("institutionType", { required: true })}
+                {...register("institution_type", { required: true })}
               />
               {type}
             </label>
           ))}
         </div>
-        {errors.institutionType && (
+        {errors.institution_type && (
           <p className="text-xs text-red-500 mt-1">
             Institution type is required
           </p>
@@ -65,7 +65,7 @@ export default function StepOne({ register, errors, watch }) {
 
       <CustomInput
         label="Date of Establishment"
-        name="dateOfEstablishment"
+        name="date_of_establishment"
         type="date"
         register={register}
         required
@@ -74,7 +74,7 @@ export default function StepOne({ register, errors, watch }) {
 
       <CustomInput
         label="Registration Number (CAC/Regulatory Authority)"
-        name="regNumber"
+        name="registration_number"
         register={register}
         required
         errors={errors}
@@ -83,7 +83,7 @@ export default function StepOne({ register, errors, watch }) {
 
       <CustomInput
         label="Regulatory Body (CBN, CAC, State Money Lender, etc.)"
-        name="regBody"
+        name="regulatory_body"
         register={register}
         required
         errors={errors}
@@ -95,7 +95,7 @@ export default function StepOne({ register, errors, watch }) {
           Operating State <span className="text-red-500">*</span>
         </label>
         <select
-          {...register("operatingState", { required: true })}
+          {...register("operating_state", { required: true })}
           className="w-full border border-gray-300 rounded-md px-3 py-2"
         >
           <option value="">Select State</option>
@@ -105,43 +105,32 @@ export default function StepOne({ register, errors, watch }) {
             </option>
           ))}
         </select>
-        {errors.operatingState && (
+        {errors.operating_state && (
           <p className="text-xs text-red-500 mt-1">Please select a state</p>
         )}
       </div>
 
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Head Office Address <span className="text-red-500">*</span>
-        </label>
-        <textarea
-          {...register("officeAddress", {
-            required: true,
-            maxLength: 500,
-            onChange: handleDescriptionChange,
-          })}
-          placeholder="Full Address"
-          className="w-full border border-gray-300 text-sm rounded-md px-3 py-2 resize-none"
-          rows={2}
-        />
-
-        {errors.officeAddress && (
-          <p className="text-xs text-red-500 mt-1">This field is required</p>
-        )}
-      </div>
 
       <CustomInput
         label="Head Office Address"
-        name="officeAddress"
+        name="head_office"
         register={register}
         required
         errors={errors}
-        placeholder="Enter office address"
+        placeholder="Full address"
+      />
+       <CustomInput
+        label="Bussiness Operational Address"
+        name="business_operation_address"
+        register={register}
+        required
+        errors={errors}
+        placeholder="Full address"
       />
 
       <CustomInput
         label="Phone Number"
-        name="phoneNumber"
+        name="phone_number"
         register={register}
         required
         errors={errors}
@@ -160,7 +149,7 @@ export default function StepOne({ register, errors, watch }) {
 
       <CustomInput
         label="Website URL (if available)"
-        name="website"
+        name="website_url"
         register={register}
         required={false}
         errors={errors}
@@ -173,7 +162,7 @@ export default function StepOne({ register, errors, watch }) {
           Brief Description <span className="text-red-500">*</span>
         </label>
         <textarea
-          {...register("briefDescription", {
+          {...register("descriptions", {
             required: true,
             maxLength: 500,
             onChange: handleDescriptionChange,
@@ -185,7 +174,7 @@ export default function StepOne({ register, errors, watch }) {
         <div className="text-sm text-gray-500 mt-1 text-right">
           {charCount}/500 characters
         </div>
-        {errors.briefDescription && (
+        {errors.descriptions && (
           <p className="text-xs text-red-500 mt-1">This field is required</p>
         )}
       </div>
