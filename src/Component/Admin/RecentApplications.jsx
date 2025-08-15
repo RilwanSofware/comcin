@@ -1,38 +1,6 @@
 // components/RecentApplications.jsx
-export default function RecentApplications() {
-  const applications = [
-    {
-      name: "Zenith Microfinance Bank",
-      email: "Zenith@test.com",
-      type: "Microfinance Institution",
-      status: "Pending Review",
-      date: "15 Jun 2025",
-    },
-    {
-      name: "Unity Cooperative Society",
-      email: "Zenith@test.com",
-
-      type: "Cooperative Society",
-      status: "Under Verification",
-      date: "13 Jun 2025",
-    },
-    {
-      name: "First City Microfinance",
-      email: "Zenith@test.com",
-
-      type: "Microfinance Institution",
-      status: "Approved",
-      date: "10 Jun 2025",
-    },
-    {
-      name: "Lagos State Cooperative",
-      email: "Zenith@test.com",
-
-      type: "Cooperative Society",
-      status: "Pending Review",
-      date: "27 July 2025",
-    },
-  ];
+export default function RecentApplications({ recent }) {
+ 
 
   return (
     <div className="bg-white rounded-lg pb-2">
@@ -55,16 +23,20 @@ export default function RecentApplications() {
           </tr>
         </thead>
         <tbody>
-          {applications.map((item, index) => (
+          {recent?.applications?.map((item, index) => (
             <tr key={index} className="border-b last:border-none">
               <td className="px-4 py-3">
                 <div className="flex flex-col">
-                  <span className="font-medium text-gray-800">{item.name}</span>
-                  <span className="text-xs text-gray-500">{item.email}</span>
+                  <span className="font-medium text-gray-800">
+                    {item.institution_name}
+                  </span>
+                  <span className="text-xs text-gray-500">
+                    {item?.user?.email}
+                  </span>
                 </div>
               </td>
 
-              <td className="px-4 py-3">{item.type}</td>
+              <td className="px-4 py-3">{item.institution_type}</td>
               <td className="px-4 py-3">
                 <span
                   className={`px-2 py-1 text-xs rounded ${
@@ -78,7 +50,15 @@ export default function RecentApplications() {
                   {item.status}
                 </span>
               </td>
-              <td className="px-4 py-3">{item.date}</td>
+              <td className="px-4 py-3">
+                {new Date(item.created_at).toLocaleString("en-US", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </td>
               <td className="px-4 py-3">
                 <button className="text-green-600 text-sm hover:underline">
                   Review

@@ -2,37 +2,36 @@ import { HiOutlineUserGroup } from "react-icons/hi";
 import { TbUserCheck } from "react-icons/tb";
 import { LiaUserClockSolid, LiaUserTimesSolid } from "react-icons/lia";
 
-
-export default function InstitutionStatCard() {
+export default function InstitutionStatCard({ cardData }) {
   const stats = [
     {
       label: "Total Institutions",
-      value: "247",
-      change: "+12%",
+      value: cardData?.total_institutions,
+      change: cardData?.total_institutions_percentage_increase,
       icon: <HiOutlineUserGroup />,
       bgColor: "#DBEAFE", // Light Blue
       textColor: "#141B34", // Dark Blue
     },
     {
       label: "Federal",
-      value: "189",
-      change: "+8%",
+      value: cardData?.total_federal_institutions,
+      change: cardData?.total_federal_institutions_percentage_increase,
       icon: <HiOutlineUserGroup />,
       bgColor: "#DCFCE7", // Light Green
       textColor: "#0A8625", // Dark Green
     },
     {
       label: "State",
-      value: "23",
-      change: "+15%",
+      value: cardData?.total_state_institutions,
+      change: cardData?.total_state_institutions_percentage_increase,
       icon: <HiOutlineUserGroup />,
       bgColor: "#FFEDD5", // Light Orange
       textColor: "#9A3412", // Dark Orange
     },
     {
       label: "Unit",
-      value: "45.2M",
-      change: "+22%",
+      value: cardData?.total_unit_institutions,
+      change: cardData?.total_unit_institutions_percentage_increase,
       icon: <HiOutlineUserGroup />,
       bgColor: "#DBEAFE", // Light Purple
       textColor: "#1D4ED8", // Dark Purple

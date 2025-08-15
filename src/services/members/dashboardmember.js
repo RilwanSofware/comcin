@@ -1,13 +1,13 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-// Helper to get token from localStorage
-const getToken = () => localStorage.getItem("token");
+const getToken = () => sessionStorage.getItem("token");
 
 export const memberDashboardApi = createApi({
   reducerPath: "memberDashboardApi",
   baseQuery: fetchBaseQuery({
     baseUrl: "https://backend.comcin.com.ng/api/v1",
     prepareHeaders: (headers) => {
+      headers.set("Accept", "application/json");
       const token = getToken();
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);

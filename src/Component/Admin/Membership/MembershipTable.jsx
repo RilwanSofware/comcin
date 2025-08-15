@@ -8,61 +8,18 @@ import { HiOutlineEye } from "react-icons/hi";
 import { MdCancel } from "react-icons/md";
 import { useState } from "react";
 
-export default function MembershipTable() {
-  const allPayments = [
-    {
-      institutionName: "Lagos State Cooperative",
-      type: "Cooperative Society",
-      recordId: "COOP/LAG/2024/156",
-      email: "admin@test.com",
-      status: "Paid",
-      state: "lagos",
-      category: "state",
-      submissionDate: "1/31/2024",
-    },
-    {
-      institutionName: "Zenith MFB",
-      type: "Microfinance Bank",
-      recordId: "MFB/LAG/2024/157",
-      email: "zenith@test.com",
-      status: "Pending",
-      state: "lagos",
-      category: "state",
-      submissionDate: "2/01/2024",
-    },
-    {
-      institutionName: "Heritage Coop",
-      email: "heritage@test.com",
-      type: "Cooperative Society",
-      recordId: "COOP/LAG/2024/158",
-      status: "Overdue",
-      state: "lagos",
-      category: "state",
-      submissionDate: "2/02/2024",
-    },
-    {
-      institutionName: "ABC Society",
-      email: "abc@test.com",
-      type: "Cooperative Society",
-      recordId: "COOP/LAG/2024/159",
-      status: "Failed",
-      state: "lagos",
-      category: "state",
-      submissionDate: "2/03/2024",
-    },
-  ];
-
+export default function MembershipTable({ data }) {
   const [activeTab, setActiveTab] = useState("pending");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
 
-  const filteredPayments =
+  const applications =
     activeTab === "pending"
-      ? allPayments.filter((p) => p.status === "Pending")
-      : allPayments;
+      ? data?.pending_applications || []
+      : data?.all_applications || [];
 
-  const totalPages = Math.ceil(filteredPayments.length / itemsPerPage);
-  const paginatedData = filteredPayments.slice(
+  const totalPages = Math.ceil(applications.length / itemsPerPage);
+  const paginatedData = applications.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -88,7 +45,10 @@ export default function MembershipTable() {
           Pending Applications
         </button>
         <button
-          onClick={() => setActiveTab("all")}
+          onClick={() => {
+            setActiveTab("all");
+            setCurrentPage(1);
+          }}
           className={`pb-2 text-sm ${
             activeTab === "all"
               ? "border-b-2 border-green-600 text-green-600 font-medium"
@@ -147,18 +107,29 @@ export default function MembershipTable() {
               <td className="px-4 py-3">
                 <div className="flex flex-col">
                   <span className="font-medium text-gray-800">
-                    {item.institutionName}
+                    {item.institution_name}
                   </span>
-                  <span className="text-xs text-gray-500">{item.email}</span>
-                  <span className="text-xs text-gray-500">{item.recordId}</span>
+                  <span className="text-xs text-gray-500">
+                    {" "}
+                    {item.user?.email}
+                  </span>
+                  <span className="text-xs text-gray-500">
+                    {" "}
+                    {item.registration_number}
+                  </span>
                 </div>
               </td>
               <td className="px-4 py-3">
-                <span className="font-medium text-gray-800">{item.type}</span>
+                <span className="font-medium text-gray-800">
+                  {item.institution_type}
+                </span>
               </td>
-              <td className="px-4 py-3 capitalize">{item.state}</td>
-              <td className="px-4 py-3 capitalize">{item.category}</td>
-              <td className="px-4 py-3">{item.submissionDate}</td>
+              <td className="px-4 py-3 capitalize">{item.operating_state}</td>
+              <td className="px-4 py-3 capitalize">{item.category_type}</td>
+              <td className="px-4 py-3">
+                {" "}
+                {new Date(item.created_at).toLocaleDateString()}
+              </td>
               <td className="px-4 py-3">{item.status}</td>
               <td className="px-4 py-3 text-center">
                 <button className="text-[#0A8625] text-sm">
@@ -173,8 +144,9 @@ export default function MembershipTable() {
       {/* Pagination Summary */}
       <div className="flex justify-between items-center px-4 py-3 text-sm text-gray-600">
         <span>
-          Showing 1 to {filteredPayments.length} of {filteredPayments.length}{" "}
-          applications
+          Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
+          {Math.min(currentPage * itemsPerPage, applications.length)} of{" "}
+          {applications.length} applications
         </span>
         <div className="flex gap-1 items-center">
           <button

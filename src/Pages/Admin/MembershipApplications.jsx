@@ -3,12 +3,17 @@ import MemberStatCard from "@/Component/Admin/Membership/MemberStatCard";
 import React from "react";
 import { LuArrowDownToLine } from "react-icons/lu";
 import { useGetAdminMembershipsQuery } from "@/services/admin-dashboard/dashboard";
+import Loader from "@/Component/Loader";
 
 export default function MembershipApplications() {
-  const { data } = useGetAdminMembershipsQuery();
+  const { data, isLoading } = useGetAdminMembershipsQuery();
 
-  console.log(data);
-  
+
+    // Show loader while fetching data
+    if (isLoading) {
+      return <Loader />;
+    }
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-start sm:justify-between sm:items-center">
@@ -26,8 +31,8 @@ export default function MembershipApplications() {
         </button>
       </div>
 
-      <MemberStatCard />
-      <MembershipTable />
+      <MemberStatCard cardsData={data?.data?.totals} />
+      <MembershipTable data={data?.data?.lists} />
     </div>
   );
 }

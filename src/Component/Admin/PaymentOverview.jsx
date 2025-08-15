@@ -2,7 +2,7 @@ import { FaCheckCircle, FaRegClock, FaInfoCircle } from "react-icons/fa";
 import { HiOutlineEye } from "react-icons/hi";
 import { MdCancel } from "react-icons/md";
 
-export default function PaymentOverview() {
+export default function PaymentOverview({ transactions }) {
   const payments = [
     {
       institution: "Lagos State Cooperative",

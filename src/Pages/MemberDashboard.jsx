@@ -5,10 +5,18 @@ import MemberStatusCard from "../Component/Dashboard/MemberStatusCard";
 import PendingLevies from "../Component/Dashboard/PendingLevies";
 import NotificationsList from "../Component/Dashboard/NotificationsList";
 import { useGetMemberDashboardQuery } from "@/services/members/dashboardmember";
+import Loader from "@/Component/Loader";
 
 export default function MemberDashboard() {
-  const { data:lekan, error, isLoading } = useGetMemberDashboardQuery();
-  console.log({ lekan, error, isLoading });
+  const { data, isLoading } = useGetMemberDashboardQuery();
+  console.log(data);
+
+  const memberData = data?.user || {};
+  const institutionData = data?.user?.institution || {};
+
+  if (isLoading) {
+    return <Loader />;
+  }
 
   const pendingLevies = Array(4).fill({
     name: "Annual Membership Levy",
@@ -36,10 +44,21 @@ export default function MemberDashboard() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
           <div className="md:col-span-1">
-            <MemberStatusCard />
+            <MemberStatusCard
+              institutionName={institutionData.institution_name}
+              membershipId={institutionData.registration_number}
+              status={institutionData.is_approved ? "Active Member" : "Pending"}
+              operatingState={institutionData.operating_state}
+              category={institutionData.category_type}
+            />
           </div>
           <div className="md:col-span-2">
-            <SummaryCardGrid />
+            <SummaryCardGrid
+              pendingChargesCount={data?.pending_charges_count || 0}
+              nextPayment={data?.next_payment_charges?.[0]}
+              certificateCount={data?.certificate_count || 0}
+              latestCertificate={data?.latest_certificate}
+            />
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">

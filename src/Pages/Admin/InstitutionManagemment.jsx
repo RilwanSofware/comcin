@@ -5,11 +5,18 @@ import MemberStatCard from "@/Component/Admin/Membership/MemberStatCard";
 import React from "react";
 import { LuArrowDownToLine } from "react-icons/lu";
 import { useGetAdminInstitutionQuery } from "@/services/admin-dashboard/dashboard";
+import Loader from "@/Component/Loader";
 
 export default function InstitutionManagemment() {
-  const {data} = useGetAdminInstitutionQuery();
-  console.log(data);
-  
+  const {data, isLoading} = useGetAdminInstitutionQuery();
+
+
+  console.log(data?.data?.members_list);
+
+   if (isLoading) {
+      return <Loader />;
+    }
+
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-start sm:justify-between sm:items-center">
@@ -27,8 +34,8 @@ export default function InstitutionManagemment() {
         </button>
       </div>
 
-      <InstitutionStatCard />
-      <InstitutionTable />
+      <InstitutionStatCard cardData={data?.data} />
+      <InstitutionTable membersList={data?.data?.members_list} />
     </div>
   );
 }

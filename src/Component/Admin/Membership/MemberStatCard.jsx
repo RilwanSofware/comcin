@@ -2,37 +2,36 @@ import { HiOutlineUserGroup } from "react-icons/hi";
 import { TbUserCheck } from "react-icons/tb";
 import { LiaUserClockSolid, LiaUserTimesSolid } from "react-icons/lia";
 
-
-export default function MemberStatCard() {
+export default function MemberStatCard({ cardsData }) {
   const stats = [
     {
       label: "Total Application",
-      value: "247",
-      change: "+12%",
+      value: cardsData?.total_applications,
+      change: cardsData?.total_applications_percentage_increase,
       icon: <HiOutlineUserGroup />,
       bgColor: "#DBEAFE", // Light Blue
       textColor: "#141B34", // Dark Blue
     },
     {
       label: "Approved Members",
-      value: "189",
-      change: "+8%",
+      value: cardsData?.total_approved_members,
+      change: cardsData?.total_approved_members_percentage_increase,
       icon: <TbUserCheck />,
       bgColor: "#DCFCE7", // Light Green
       textColor: "#0A8625", // Dark Green
     },
     {
       label: "Pending",
-      value: "23",
-      change: "+15%",
+      value: cardsData?.pending_members,
+      change: cardsData?.pending_members_percentage_increase,
       icon: <LiaUserClockSolid />,
       bgColor: "#FFEDD5", // Light Orange
       textColor: "#9A3412", // Dark Orange
     },
     {
       label: "Rejected",
-      value: "45.2M",
-      change: "+22%",
+      value: cardsData?.total_rejected,
+      change: cardsData?.total_rejected_percentage_increase,
       icon: <LiaUserTimesSolid />,
       bgColor: "#FFE8E5", // Light Purple
       textColor: "#EF4444", // Dark Purple

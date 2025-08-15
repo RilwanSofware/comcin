@@ -1,14 +1,29 @@
-export default function InstitutionStatus() {
+export default function InstitutionStatus({ status, statusValue }) {
   const statuses = [
-    { label: "Active Members", count: 189, percent: 65, color: "bg-[#22C55E]" },
+    {
+      label: "Active Members",
+      count: statusValue?.active_members,
+      percent: status?.active_members_percentage,
+      color: "bg-[#22C55E]",
+    },
     {
       label: "Pending Approval",
-      count: 23,
-      percent: 15,
+      count: statusValue?.pending_applications,
+      percent: status?.pending_approvals_percentage,
       color: "bg-[#F97316]",
     },
-    { label: "Under Review", count: 18, percent: 12, color: "bg-[#3B82F6]" },
-    { label: "Suspended", count: 17, percent: 8, color: "bg-[#EF4444]" },
+    {
+      label: "Under Review",
+      count: statusValue?.pending_applications,
+      percent: status?.under_review_percentage,
+      color: "bg-[#3B82F6]",
+    },
+    {
+      label: "Suspended",
+      count: statusValue?.pending_applications,
+      percent: status?.suspended_members_percentage,
+      color: "bg-[#EF4444]",
+    },
   ];
 
   return (

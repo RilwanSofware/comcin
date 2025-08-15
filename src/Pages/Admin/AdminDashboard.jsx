@@ -5,13 +5,17 @@ import InstitutionStatus from "@/Component/Admin/InstitutionStatus";
 import RecentActivity from "@/Component/Admin/RecentActivity";
 import { LuArrowDownToLine } from "react-icons/lu";
 import { useGetDashboardQuery } from "@/services/admin-dashboard/dashboard";
+import Loader from "@/Component/Loader";
 
 
 export default function AdminDashboard() {
-  const { data:dashboard, error, isLoading } = useGetDashboardQuery();
+  const { data: dashboard, isLoading } = useGetDashboardQuery();
 
 
-  console.log(dashboard, "dashboard")
+  // Show loader while fetching data
+  if (isLoading) {
+    return <Loader />;
+  }
 
   return (
     <div className="space-y-6">
@@ -29,15 +33,15 @@ export default function AdminDashboard() {
         </button>
       </div>
 
-      <DashboardStats />
+      <DashboardStats cardsStat={dashboard?.data} />
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         <div className="xl:col-span-2 space-y-6">
-          <RecentApplications />
-          <PaymentOverview />
+          <RecentApplications recent={dashboard?.data?.recent} />
+          <PaymentOverview transactions={dashboard?.data?.recent} />
         </div>
         <div className="space-y-6">
-          <InstitutionStatus />
+          <InstitutionStatus status={dashboard?.data?.status_percentages} statusValue={dashboard?.data?.totals} />
           <RecentActivity />
         </div>
       </div>
