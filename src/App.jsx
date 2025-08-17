@@ -25,6 +25,7 @@ import ReportAndAnalitics from "./Pages/Admin/ReportAndAnalitics";
 import RequireAuth from "./Component/RequireAuth";
 import GuestRoute from "./Component/GuestRoute";
 import Verify from "./Pages/Verify";
+import ContentManagement from "./Pages/Admin/ContentManagement";
 
 export default function App() {
   return (
@@ -106,7 +107,7 @@ export default function App() {
           <Route path="institutions" element={<InstitutionManagemment />} />
           <Route path="financials" element={<AdminFinacials />} />
           <Route path="reports" element={<ReportAndAnalitics />} />
-          <Route path="content" element={<MembershipApplications />} />
+          <Route path="content" element={<ContentManagement />} />
           <Route path="users" element={<AdminUsers />} />
           <Route path="settings" element={<Settings />} />
         </Route>

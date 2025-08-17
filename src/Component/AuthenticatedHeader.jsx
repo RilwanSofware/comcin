@@ -3,13 +3,20 @@ import { Link, NavLink as RouterNavLink, useNavigate } from "react-router-dom";
 import { FiBell, FiChevronDown, FiMenu } from "react-icons/fi";
 import logo from "../assets/logo.png";
 import { HiChevronDown } from "react-icons/hi";
+import { useGetMemberDashboardQuery } from "@/services/members/dashboardmember";
+import { getInitials } from "@/utils";
 
 export default function AuthenticatedHeader() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const { data } = useGetMemberDashboardQuery();
   const navigate = useNavigate();
+
+  console.log(data?.user?.name);
 
   const handleLogout = () => {
     console.log("Logging out...");
+    sessionStorage.removeItem("token");
+    sessionStorage.clear();
     navigate("/login");
   };
 
@@ -23,7 +30,9 @@ export default function AuthenticatedHeader() {
               <img src={logo} alt="COMCIN Logo" className="h-12" />
             </Link>
             <nav className="hidden md:flex gap-6">
-              <NavLink to="/dashboard" exact={true}>Dashboard</NavLink>
+              <NavLink to="/dashboard" exact={true}>
+                Dashboard
+              </NavLink>
               <NavLink to="/dashboard/institution">My Institution</NavLink>
               <NavLink to="/dashboard/finacials">Financials</NavLink>
               <NavLink to="/dashboard/certificates">Certificates</NavLink>
@@ -42,11 +51,11 @@ export default function AuthenticatedHeader() {
               aria-label="User menu"
               aria-expanded={isDropdownOpen}
             >
-              <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-white font-medium">
-                NE
+              <div className=" p-1 rounded-full bg-blue-500 flex items-center justify-center text-white font-medium">
+                {getInitials(data?.user?.name)}
               </div>
               <span className="hidden md:inline text-gray-700 text-sm">
-                N.E.A.T Bank
+                {data?.user?.name}
               </span>
               <HiChevronDown
                 className={`w-5 h-5 text-gray-500 transition-transform ${

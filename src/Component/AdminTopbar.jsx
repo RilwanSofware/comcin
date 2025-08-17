@@ -4,14 +4,20 @@ import { FiBell, FiMenu, FiSearch } from "react-icons/fi";
 import { HiChevronDown } from "react-icons/hi";
 import logo from "../assets/logo.png";
 import { CgMenuLeft } from "react-icons/cg";
+import { getInitials } from "@/utils";
 
 export default function AdminTopbar() {
+
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    // console.log("Logging out...");
+    sessionStorage.removeItem("token");
+    sessionStorage.clear();
     navigate("/login");
   };
+
 
   return (
     <header className="bg-white w-full px-4 py-3 shadow-sm mt-5">

@@ -11,6 +11,8 @@ import StepThree from "../Component/Register/StepThree";
 import { useCreateAccountMutation } from "@/services/auth";
 import toast from "react-hot-toast";
 
+
+
 const slides = [
   {
     title: "Empowering Institutions",
