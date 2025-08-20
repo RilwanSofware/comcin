@@ -11,16 +11,16 @@ import aboutImage from "../../assets/green.png";
 import { ImStatsDots } from "react-icons/im";
 import { TbBulb } from "react-icons/tb";
 import { FiPlus, FiMinus } from "react-icons/fi";
-import { FaArrowRightLong } from 'react-icons/fa6';
-
+import { FaArrowRightLong } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 
 export default function AboutFirstSection() {
   const [activeTab, setActiveTab] = useState("mission");
 
   return (
-    <section id="about" className="py-16">
+    <section id="about" className="">
       <div className="container mx-auto px-4">
-        <div className="my-10 flex justify-between gap-8">
+        <div className="my-2 md:my-10 flex flex-col md:flex-row justify-between gap-8">
           {/* Left column */}
           <div className="flex-1">
             <p className="bg-white text-sm text-[#0A8625] inline-flex gap-2 items-center rounded-full py-1 px-4">
@@ -36,7 +36,7 @@ export default function AboutFirstSection() {
           {/* Right column */}
           <div className="flex-1">
             {/* Description Text */}
-            <div className="p-3 mb-4">
+            <div className="mb-4">
               <p className="text-gray-700">
                 COMCIN has managed a high potential to develop impact on the
                 business. The executive instructions, including Cognitive &
@@ -46,15 +46,18 @@ export default function AboutFirstSection() {
             </div>
 
             <div className="inline-flex bg-[#0A8625] text-white p-3 rounded-lg">
-              <h2 className="text-base font-bold">
+              <Link
+                to="/register"
+                className="flex items-center gap-2 text-base font-bold"
+              >
                 Become a member now <FaArrowRightLong />
-              </h2>
+              </Link>
             </div>
           </div>
         </div>
 
         {/* Two Column Layout */}
-        <div className="grid md:grid-cols-2 gap-12 items-start">
+        <div className="grid md:grid-cols-2 gap-12 items-start mt-5">
           {/* Left Column - Image */}
           <div className="rounded-lg overflow-hidden shadow-lg">
             <img

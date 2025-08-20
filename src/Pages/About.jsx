@@ -2,6 +2,7 @@ import React from "react";
 import ContactHero from "@/Component/ContactHero";
 import Footer from "@/Component/Footer";
 import AboutFirstSection from "@/Component/AboutUs/AboutFirstSection";
+import MeetMinds from "@/Component/AboutUs/MeetMinds";
 
 export default function About() {
   return (
@@ -13,6 +14,7 @@ export default function About() {
         />
 
         <AboutFirstSection />
+        <MeetMinds />
       </main>
 
       <Footer />
