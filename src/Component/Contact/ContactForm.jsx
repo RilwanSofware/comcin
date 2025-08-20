@@ -52,25 +52,25 @@ export default function ContactForm() {
             <p className="mb-2">Socials:</p>
             <div className="flex space-x-4">
               <a
-                href="#"
+                href="https://web.facebook.com/comcinigeria/"
                 className="text-white p-2 bg-white/10 hover:bg-white/20 rounded"
               >
                 <FaFacebookF />
               </a>
               <a
-                href="#"
+                href="https://x.com/Comcinigeria/"
                 className="text-white p-2 bg-white/10 hover:bg-white/20 rounded"
               >
                 <FaXTwitter />
               </a>
               <a
-                href="#"
+                href="https://www.linkedin.com/in/comcin"
                 className="text-white p-2 bg-white/10 hover:bg-white/20 rounded"
               >
                 <FaLinkedinIn />
               </a>
               <a
-                href="#"
+                href="https://www.instagram.com/comcinnigeria"
                 className="text-white p-2 bg-white/10 hover:bg-white/20 rounded"
               >
                 <FaInstagram />
