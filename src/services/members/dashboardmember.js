@@ -20,7 +20,36 @@ export const memberDashboardApi = createApi({
     getMemberDashboard: builder.query({
       query: () => "/member/dashboard",
     }),
+     getMemberDashboardInstitution: builder.query({
+      query: () => "/member/institution",
+    }),
+    getMemberDashboardCert: builder.query({
+      query: () => "/member/certificates",
+    }),
+     getMemberDashboardFinacials: builder.query({
+      query: () => "/member/financials",
+    }),
+      getMemberDashboardNotification: builder.query({
+      query: () => "/member/notifications",
+    }),
+     getMemberDashboardTickets: builder.query({
+      query: () => "/member/support/tickets",
+    }),
+    createSupport: builder.mutation({
+      query: (data) => ({
+        url: "/member/support/tickets",
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
-export const { useGetMemberDashboardQuery } = memberDashboardApi;
+export const { useGetMemberDashboardQuery, 
+  useGetMemberDashboardInstitutionQuery,
+  useGetMemberDashboardCertQuery,
+  useGetMemberDashboardFinacialsQuery,
+  useGetMemberDashboardNotificationQuery,
+useGetMemberDashboardTicketsQuery,
+useCreateSupportMutation
+ } = memberDashboardApi;

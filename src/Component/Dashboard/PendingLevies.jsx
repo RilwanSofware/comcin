@@ -14,7 +14,7 @@ export default function PendingLevies({ levies }) {
           </p>
         </div>
         <Link
-        to="/finacials"
+        to="/dashboard/finacials"
          className="border bg-white border-[#0A8625] z-10 px-4 py-2 rounded text-xs font-bold text-[#0A8625] ">
           View all
         </Link>

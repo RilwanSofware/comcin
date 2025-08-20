@@ -4,8 +4,22 @@ import InstitutionProfile from "@/Component/MyInstitute/InstitutionProfile";
 import InstitutionalInformation from "@/Component/MyInstitute/InstitutionalInformation";
 import KeyContactPerson from "@/Component/MyInstitute/KeyContactPerson";
 import UploadedFiles from "@/Component/MyInstitute/UploadedFiles";
+import {
+  useGetMemberDashboardInstitutionQuery,
+  useGetMemberDashboardQuery,
+} from "@/services/members/dashboardmember";
+import Loader from "@/Component/Loader";
 
 export default function MyInstitution() {
+  const { data, isLoading } = useGetMemberDashboardInstitutionQuery();
+  const { data: personalInfo } = useGetMemberDashboardQuery();
+
+  console.log("personalInfo", personalInfo);
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto py-8">
@@ -21,14 +35,17 @@ export default function MyInstitution() {
         <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-6 mt-6 px-4">
           {/* Left Column: Profile + Institutional Info */}
           <div className="flex flex-col">
-            <InstitutionProfile />
-            <InstitutionalInformation />
+            <InstitutionProfile personalInfo={personalInfo} />
+            <InstitutionalInformation
+              institution={data}
+              personalInfo={personalInfo}
+            />
           </div>
 
           {/* Right Column: Key Contact + Uploaded Files */}
           <div className="flex flex-col gap-6">
             <KeyContactPerson />
-            <UploadedFiles />
+            <UploadedFiles files={data} />
           </div>
         </div>
       </div>

@@ -3,8 +3,16 @@ import { BiSupport } from "react-icons/bi";
 import SupportForm from "../Component/Support/SupportForm";
 import ContactCard from "../Component/Support/ContactCard";
 import SupportTicket from "../Component/Support/SupportTicket";
+import { useGetMemberDashboardTicketsQuery } from "@/services/members/dashboardmember";
+import Loader from "@/Component/Loader";
 
 export default function Support() {
+  const { data, refetch, isLoading } = useGetMemberDashboardTicketsQuery();
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto py-8">
@@ -17,13 +25,13 @@ export default function Support() {
         </div>
         <div className="grid [grid-template-columns:3fr_2fr] gap-6 mt-6">
           <div className="w-full">
-            <SupportForm />
+            <SupportForm refetch={refetch} />
           </div>
           <div className="w-full">
             <ContactCard />
           </div>
         </div>
-        <SupportTicket />
+        <SupportTicket tickets={data} />
       </div>
     </div>
   );

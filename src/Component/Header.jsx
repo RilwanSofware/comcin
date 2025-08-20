@@ -21,12 +21,12 @@ export default function Header() {
 
         {/* Main Navigation - now positioned right next to logo */}
         <nav className="hidden md:flex space-x-8 items-center">
-          <button
-            onClick={() => scrollTo("about")}
+          <Link
+            to="/about"
             className="text-navtext hover:text-gray-500 transition-colors text-sm font-medium"
           >
             About
-          </button>
+          </Link>
           <Link
             to="/members"
             className="text-navtext hover:text-gray-500 transition-colors text-sm font-medium"

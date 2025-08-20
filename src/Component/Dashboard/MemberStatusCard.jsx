@@ -22,7 +22,7 @@ export default function MemberStatusCard({
           <span className="text-[#3B9E51] ">#{membershipId}</span>
         </div>
         <button className="border bg-white border-[#0A8625] z-10 p-2 rounded text-xs font-bold text-[#0A8625] ">
-          {status} Member
+          {status}
         </button>
       </div>
 

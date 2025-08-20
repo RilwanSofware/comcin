@@ -4,34 +4,54 @@ import SummaryCardGrid from "../Component/Dashboard/SummaryCardGrid";
 import MemberStatusCard from "../Component/Dashboard/MemberStatusCard";
 import PendingLevies from "../Component/Dashboard/PendingLevies";
 import NotificationsList from "../Component/Dashboard/NotificationsList";
-import { useGetMemberDashboardQuery } from "@/services/members/dashboardmember";
+import {
+  useGetMemberDashboardQuery,
+  useGetMemberDashboardFinacialsQuery,
+  useGetMemberDashboardNotificationQuery,
+} from "@/services/members/dashboardmember";
 import Loader from "@/Component/Loader";
 
 export default function MemberDashboard() {
   const { data, isLoading } = useGetMemberDashboardQuery();
-  console.log(data);
+  const { data: notification } = useGetMemberDashboardNotificationQuery();
+  const { data: leviesData, isLoading: isLeviesLoading } =
+    useGetMemberDashboardFinacialsQuery();
+
+  console.log(notification);
 
   const memberData = data?.user || {};
   const institutionData = data?.user?.institution || {};
 
-  if (isLoading) {
+  if (isLoading || isLeviesLoading) {
     return <Loader />;
   }
 
-  const pendingLevies = Array(4).fill({
-    name: "Annual Membership Levy",
-    amount: "5000.00",
-    dueDate: "15 JUNE 2025",
-    status: "UNPAID",
-  });
+  const pendingLevies =
+    leviesData?.pending_charges?.map((item) => ({
+      name: item.title,
+      amount: item.amount,
+      dueDate: new Date(item.due_date).toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      }),
+      status: item.status.toUpperCase(),
+    })) || [];
 
-  const notifications = [
-    { sender: "COMCIN ADMIN", type: "Upcoming Event" },
-    { sender: "Paystack", type: "Payment Failed" },
-    { sender: "Security", type: "Password Reset" },
-    { sender: "COMCIN ADMIN", type: "Due Payment" },
-    { sender: "COMCIN ADMIN", type: "Upcoming Event" },
-  ];
+  const notifications =
+    notification?.map((item) => ({
+      sender: item.title, // use title as sender
+      type: item.category, // or item.type if you prefer
+      content: item.content,
+      time: new Date(item.created_at).toLocaleString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+      read: !!item.read_at,
+    })) || [];
 
   return (
     <div className="min-h-screen bg-gray-50">

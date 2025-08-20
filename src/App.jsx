@@ -26,6 +26,7 @@ import RequireAuth from "./Component/RequireAuth";
 import GuestRoute from "./Component/GuestRoute";
 import Verify from "./Pages/Verify";
 import ContentManagement from "./Pages/Admin/ContentManagement";
+import About from "./Pages/About";
 
 export default function App() {
   return (
@@ -36,6 +37,7 @@ export default function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/members" element={<MembersDirectory />} />
         <Route path="/news" element={<News />} />
+        <Route path="/about" element={<About />} />
 
         {/* Guest-only routes */}
         <Route

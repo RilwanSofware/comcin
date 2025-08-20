@@ -7,19 +7,50 @@ import CustomInput from "../CustomInput";
 
 const states = ["Lagos", "Abuja", "Kano", "Enugu", "Oyo", "Kaduna"]; // Example
 
-export default function InstitutionalInformationModal({ onClose }) {
-  const [charCount, setCharCount] = useState(0);
+export default function InstitutionalInformationModal({
+  onClose,
+  initialData,
+  personalInfo
+}) {
+ 
+
+   const mappedDefaults = initialData
+    ? {
+        institutionName: initialData.institution_name || "",
+        institutionType: initialData.institution_type || "",
+        dateOfEstablishment: initialData.date_of_establishment
+          ? initialData.date_of_establishment.split("T")[0] // format to yyyy-mm-dd
+          : "",
+        regNumber: initialData.registration_number || "",
+        regBody: initialData.regulatory_body || "",
+        operatingState: initialData.operating_state || "",
+        officeAddress: initialData.head_office || "",
+        phoneNumber: personalInfo?.user.phone_number || "",
+        email: personalInfo?.user.email || "",
+        website: initialData.website_url || "",
+        briefDescription: initialData.descriptions || "",
+      }
+    : {};
+
+     const [charCount, setCharCount] = useState(
+    mappedDefaults.briefDescription?.length || 0
+  );
+
+  console.log(initialData, "latest")
 
   const handleDescriptionChange = (e) => {
     const value = e.target.value;
     setCharCount(value.length);
   };
-  const {
+
+   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: mappedDefaults,
+  });
+
 
   const onSubmit = (data) => {
     console.log("Submitted Data:", data);
@@ -73,16 +104,18 @@ export default function InstitutionalInformationModal({ onClose }) {
                 Institution Type <span className="text-red-500">*</span>
               </label>
               <div className="flex space-x-4">
-                {["Microfinance Bank", "Cooperative", "Other"].map((type) => (
-                  <label key={type} className="flex items-center gap-2">
-                    <input
-                      type="radio"
-                      value={type}
-                      {...register("institutionType", { required: true })}
-                    />
-                    {type}
-                  </label>
-                ))}
+                {["Microfinance", "Cooperative", "Other"].map(
+                  (type) => (
+                    <label key={type} className="flex items-center gap-2">
+                      <input
+                        type="radio"
+                        value={type}
+                        {...register("institutionType", { required: true })}
+                      />
+                      {type}
+                    </label>
+                  )
+                )}
               </div>
               {errors.institutionType && (
                 <p className="text-xs text-red-500 mt-1">

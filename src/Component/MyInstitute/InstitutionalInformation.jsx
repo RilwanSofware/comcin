@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import InstitutionalInformationModal from "./InstitutionalInformationModal";
 
-export default function InstitutionalInformation() {
+export default function InstitutionalInformation({
+  institution,
+  personalInfo,
+}) {
   const [showModal, setShowModal] = useState(false);
+
   return (
     <div className="bg-white rounded-lg p-6">
       <div className="flex justify-between items-center mb-4">
@@ -18,103 +22,118 @@ export default function InstitutionalInformation() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {/* Full Legal Name */}
         <div>
           <label className="block text-sm text-gray-700 mb-1">
             Full Legal Name
           </label>
           <input
             className="border border-[#E9E9E9] outline-none rounded px-3 py-2 text-sm w-full"
-            placeholder="Enter your institution’s full legal name"
+            value={institution?.institution_name || ""}
+            readOnly
           />
         </div>
 
+        {/* Date of Registration */}
         <div>
           <label className="block text-sm text-gray-700 mb-1">
             Date of Registration
           </label>
           <input
             className="border border-[#E9E9E9] outline-none  rounded px-3 py-2 text-sm w-full"
-            placeholder="dd/mm/yyyy"
+            value={
+              institution?.date_of_establishment
+                ? new Date(
+                    institution.date_of_establishment
+                  ).toLocaleDateString()
+                : ""
+            }
+            readOnly
           />
         </div>
 
+        {/* Registration Number */}
         <div>
           <label className="block text-sm text-gray-700 mb-1">
             Registration Number
           </label>
           <input
             className="border border-[#E9E9E9] outline-none  rounded px-3 py-2 text-sm w-full"
-            value="RG123987654"
+            value={institution?.registration_number || ""}
             readOnly
           />
         </div>
 
+        {/* Registration Type */}
         <div>
           <label className="block text-sm text-gray-700 mb-1">
             Registration Type
           </label>
           <input
             className="border border-[#E9E9E9] outline-none  rounded px-3 py-2 text-sm w-full"
-            value="CAC"
+            value={institution?.institution_type || ""}
             readOnly
           />
         </div>
 
+        {/* State */}
         <div>
           <label className="block text-sm text-gray-700 mb-1">State</label>
-          <select className="border border-[#E9E9E9] outline-none  rounded px-3 py-2 text-sm w-full">
-            <option>Select State</option>
-          </select>
+          <input
+            className="border border-[#E9E9E9] outline-none  rounded px-3 py-2 text-sm w-full"
+            value={institution?.operating_state || ""}
+            readOnly
+          />
         </div>
 
+        {/* Phone Number */}
         <div>
           <label className="block text-sm text-gray-700 mb-1">
             Phone Number
           </label>
-          <div className="flex gap-2">
-            <select className="border border-[#E9E9E9] outline-none  rounded px-3 py-2 text-sm w-24">
-              <option>+234</option>
-            </select>
-            <input
-              className="border border-[#E9E9E9] outline-none  rounded px-3 py-2 text-sm w-full"
-              placeholder="80978654321"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-sm text-gray-700 mb-1">Email</label>
           <input
-            className="border border-[#E9E9E9] rounded outline-none  px-3 py-2 text-sm w-full"
-            placeholder="Enter email"
+            className="border border-[#E9E9E9] outline-none  rounded px-3 py-2 text-sm w-full"
+            value={personalInfo?.user?.phone_number || "N/A"}
+            readOnly
+          />
+        </div>
+          {/* Phone Number */}
+        <div>
+          <label className="block text-sm text-gray-700 mb-1">
+            Email
+          </label>
+          <input
+            className="border border-[#E9E9E9] outline-none  rounded px-3 py-2 text-sm w-full"
+            value={personalInfo?.user?.email || "N/A"}
+            readOnly
           />
         </div>
 
+        {/* Website */}
         <div>
           <label className="block text-sm text-gray-700 mb-1">
             Website (if available)
           </label>
-          <div className="flex rounded overflow-hidden border border-[#E9E9E9]">
-            <span className="bg-gray-100 px-3 py-2 text-sm text-gray-500 flex items-center">
-              http://
-            </span>
-            <input
-              className="px-3 py-2 text-sm w-full  focus:outline-none"
-              placeholder="Website URL"
-            />
-          </div>
+          <input
+            className="border border-[#E9E9E9] outline-none  rounded px-3 py-2 text-sm w-full"
+            value={institution?.website_url || ""}
+            readOnly
+          />
         </div>
 
+        {/* Head Office Address */}
         <div className="col-span-2">
           <label className="block text-sm text-gray-700 mb-1">
             Head Office Address
           </label>
           <input
             className="border border-[#E9E9E9] outline-none  rounded px-3 py-2 text-sm w-full"
-            placeholder="Enter address"
+            value={institution?.head_office || ""}
+            readOnly
           />
         </div>
 
+        {/* Description */}
         <div className="col-span-2">
           <label className="block text-sm text-gray-700 mb-1">
             Institution’s Mission & Services
@@ -122,12 +141,18 @@ export default function InstitutionalInformation() {
           <textarea
             className="border border-[#E9E9E9] outline-none rounded px-3 py-2 text-sm w-full"
             rows="3"
-            placeholder="Provide a brief description (max 500 characters)"
+            value={institution?.descriptions || ""}
+            readOnly
           />
         </div>
       </div>
+
       {showModal && (
-        <InstitutionalInformationModal onClose={() => setShowModal(false)} />
+        <InstitutionalInformationModal
+          initialData={institution}
+          personalInfo={personalInfo}
+          onClose={() => setShowModal(false)}
+        />
       )}
     </div>
   );

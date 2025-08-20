@@ -1,43 +1,23 @@
 import React, { useState } from "react";
-import { TbReceipt2 } from "react-icons/tb";
 
-export default function SupportTicket() {
+export default function SupportTicket({ tickets }) {
   const [search, setSearch] = useState("");
   const [sortOption, setSortOption] = useState("newest");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
-  // Unified data with mixed statuses
-  const tickets = [
-    ...Array(5).fill({
-      name: "TCK-1001",
-      amount: "Unable to login",
-      dueDate: "10 JULY 2025",
-      status: "Pending",
-    }),
-    ...Array(5).fill({
-      name: "TCK-1002",
-      amount: "Issue with payment",
-      dueDate: "12 JULY 2025",
-      status: "Resolved",
-    }),
-    ...Array(4).fill({
-      name: "TCK-1003",
-      amount: "Wrong info in profile",
-      dueDate: "08 JULY 2025",
-      status: "Cancelled",
-    }),
-  ];
-
-  // --- Search, Sort, Paginate ---
+  // --- Search ---
   const filteredTickets = tickets.filter((ticket) =>
-    ticket.amount.toLowerCase().includes(search.toLowerCase())
+    ticket.subject.toLowerCase().includes(search.toLowerCase())
   );
 
+  // --- Sort ---
   const sortedTickets = [...filteredTickets].sort((a, b) => {
-    const dateA = new Date(a.dueDate);
-    const dateB = new Date(b.dueDate);
-    return sortOption === "oldest" ? dateA - dateB : dateB - dateA;
+    const dateA = new Date(a.created_at);
+    const dateB = new Date(b.created_at);
+
+    if (sortOption === "oldest") return dateA - dateB;
+    return dateB - dateA;
   });
 
   const totalPages = Math.ceil(sortedTickets.length / itemsPerPage);
@@ -52,16 +32,14 @@ export default function SupportTicket() {
         <div className="bg-white rounded-lg">
           {/* Header */}
           <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4 border-b border-[#E9EEEA] p-4 pt-3">
-            <div>
-              <h3 className="text-lg font-maven font-medium text-[#1E1E1E]">
-                My Support Tickets
-              </h3>
-            </div>
+            <h3 className="text-lg font-maven font-medium text-[#1E1E1E]">
+              My Support Tickets
+            </h3>
 
             <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto">
               <input
                 type="text"
-                placeholder="Search by name..."
+                placeholder="Search by subject..."
                 className="border border-[#E9EEEA] rounded px-3 py-2 text-sm w-full sm:w-64 focus:outline-none focus:ring-2 focus:ring-[#0A8625]"
                 value={search}
                 onChange={(e) => {
@@ -77,7 +55,6 @@ export default function SupportTicket() {
               >
                 <option value="newest">Sort by: Newest</option>
                 <option value="oldest">Sort by: Oldest</option>
-                <option value="amount">Sort by: Amount</option>
               </select>
             </div>
           </div>
@@ -97,8 +74,8 @@ export default function SupportTicket() {
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
                   {paginatedTickets.length ? (
-                    paginatedTickets.map((ticket, index) => (
-                      <TableRow key={index} ticket={ticket} />
+                    paginatedTickets.map((ticket) => (
+                      <TableRow key={ticket.id} ticket={ticket} />
                     ))
                   ) : (
                     <tr>
@@ -155,21 +132,21 @@ const TableHeader = ({ children }) => (
 const TableRow = ({ ticket }) => {
   const statusColor =
     {
-      Resolved: "text-[#0A8625]",
-      Pending: "text-[#F3AB11]",
-      Cancelled: "text-[#B20B0B]",
-    }[ticket.status] || "text-gray-500";
+      resolved: "text-[#0A8625]",
+      pending: "text-[#F3AB11]",
+      cancelled: "text-[#B20B0B]",
+    }[ticket.status?.toLowerCase()] || "text-gray-500";
 
   return (
     <tr>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-[#1E1E1E]">
-        {ticket.name}
+        {ticket.uuid}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-[#1E1E1E]">
-        {ticket.amount}
+        {ticket.subject}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-[#1E1E1E]">
-        {ticket.dueDate}
+        {new Date(ticket.created_at).toLocaleDateString()}
       </td>
       <td
         className={`px-6 py-4 whitespace-nowrap text-sm font-medium ${statusColor}`}
