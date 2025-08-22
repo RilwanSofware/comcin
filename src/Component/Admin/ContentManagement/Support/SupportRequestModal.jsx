@@ -5,33 +5,70 @@ import { useForm } from "react-hook-form";
 import { BsPatchCheck, BsBookmarkDash } from "react-icons/bs";
 import { FaRegTimesCircle } from "react-icons/fa";
 import { MdOutlineCancelPresentation } from "react-icons/md";
+import { useApproveRequestSuportMutation } from "@/services/admin-dashboard/dashboard";
+import toast from "react-hot-toast";
 
 export default function SupportRequestModal({
   onClose,
   mode = "create",
   initialData,
 }) {
+  const [approveRequestSuport, { isLoading }] =
+    useApproveRequestSuportMutation();
+
+  // Map API fields to form fields
+  const defaultValues = {
+    title: initialData?.subject || "",
+    description: initialData?.message || "",
+  };
+
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues,
+  });
 
   useEffect(() => {
     if (mode === "edit" && initialData) {
-      reset(initialData); // prefill form fields
+      reset(defaultValues); // prefill form fields
     }
   }, [mode, initialData, reset]);
 
-  const onSubmit = (data) => {
-    const payload = { ...data, rating };
+  // Format date
+  const formattedDate = initialData?.created_at
+    ? new Date(initialData.created_at).toLocaleString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      })
+    : "";
+
+  console.log("initialData:", initialData);
+
+  // Handle submit
+  const onSubmit = async (data) => {
     if (mode === "edit") {
-      console.log("Updated Data:", payload);
+      try {
+        await approveRequestSuport({
+          user_id: initialData?.user_id,
+          action: "approve",
+        }).unwrap();
+        toast.success("Support request marked as resolved!");
+        onClose();
+      } catch (error) {
+        toast.error(
+          error?.data?.message || "Failed to resolve support request"
+        );
+      }
     } else {
-      console.log("Created Data:", payload);
+      // Handle create mode if needed
+      onClose();
     }
-    onClose();
   };
 
   return (
@@ -56,20 +93,16 @@ export default function SupportRequestModal({
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-3">
               <div className="w-12 h-12 rounded-full bg-green-200 flex items-center justify-center text-lg font-bold text-green-800">
-                {initialData?.author?.[0] || "A"}
+                {initialData?.name?.[0] || "A"}
               </div>
               <div>
                 <p className="font-semibold text-gray-800">
-                  {initialData?.author || "John Doe"}
+                  {initialData?.name}
                 </p>
-                <p className="text-sm text-gray-500">
-                  {initialData?.email || "johndoe@email.com"}
-                </p>
+                <p className="text-sm text-gray-500">{initialData?.email}</p>
               </div>
             </div>
-            <span className="text-sm text-gray-400">
-              {initialData?.date || "28 Jun 2025 · 19:00"}
-            </span>
+            <span className="text-sm text-gray-400">{formattedDate} </span>
           </div>
 
           {/* Title */}

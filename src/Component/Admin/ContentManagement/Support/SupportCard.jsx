@@ -1,39 +1,37 @@
-
 import { RiBuildingLine } from "react-icons/ri";
 import { GoPerson } from "react-icons/go";
 import { LuFileText } from "react-icons/lu";
 
-
-export default function SupportCard() {
+export default function SupportCard({ supportData }) {
   const stats = [
     {
       label: "Total Tickets",
-      value: "1,247",
-      change: "+3",
+      value: supportData?.stats?.total,
+      change: +supportData?.growth?.total,
       icon: <LuFileText />,
       bgColor: "#DBEAFE", // Light Blue
       textColor: "#2563EB", // Dark Blue
     },
     {
       label: "Resolved",
-      value: "89",
-      change: "+8",
+      value: supportData?.stats?.resolved,
+      change: +supportData?.growth?.resolved,
       icon: <LuFileText />,
       bgColor: "#DCFCE7", // Light Green
       textColor: "#047857", // Dark Green
     },
     {
       label: "Pending",
-      value: "15",
-      change: "",
+      value: supportData?.stats?.pending,
+      change: +supportData?.growth?.pending,
       icon: <LuFileText />,
       bgColor: "#FFEDD5", // Light Orange
       textColor: "#EA580C", // Dark Orange
     },
-     {
+    {
       label: "Rejected",
-      value: "15",
-      change: "",
+      value: supportData?.stats?.cancelled,
+      change: +supportData?.growth?.cancelled,
       icon: <LuFileText />,
       bgColor: "#FEE2E2", // Light Orange
       textColor: "#B20B0B", // Dark Orange
@@ -79,4 +77,3 @@ export default function SupportCard() {
     </div>
   );
 }
-

@@ -26,8 +26,41 @@ export const adminDashboardApi = createApi({
     getAdminInstitution: builder.query({
       query: () => "/admin/institutions",
     }),
+    getAdminSupport: builder.query({
+      query: () => "/admin/support-tickets",
+    }),
+    approveRequestSuport: builder.mutation({
+      query: ({ user_id, data }) => ({
+        url: `/admin/support-tickets/${user_id}/action`,
+        method: "POST",
+        body: data,
+      }),
+    }),
+
+
+     getAdminTestimonial: builder.query({
+      query: () => "/admin/testimonials",
+    }),
+    // approveRequestSuport: builder.mutation({
+    //   query: ({ user_id, data }) => ({
+    //     url: `/admin/support-tickets/${user_id}/action`,
+    //     method: "POST",
+    //     body: data,
+    //   }),
+    // }),
+
+
+// /api/v1/admin/members
+
     getAdminSingleApplication: builder.query({
       query: ({ user_id }) => `/admin/applications/${user_id}`,
+    }),
+    approveRequest: builder.mutation({
+      query: ({ user_id, data }) => ({
+        url: `/admin/applications/${user_id}/action`,
+        method: "POST",
+        body: data,
+      }),
     }),
   }),
 });
@@ -36,5 +69,9 @@ export const {
   useGetDashboardQuery,
   useGetAdminMembershipsQuery,
   useGetAdminInstitutionQuery,
-  useGetAdminSingleApplicationQuery
+  useGetAdminSingleApplicationQuery,
+  useApproveRequestMutation,
+  useApproveRequestSuportMutation,
+  useGetAdminSupportQuery,
+  useGetAdminTestimonialQuery
 } = adminDashboardApi;

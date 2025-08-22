@@ -12,9 +12,16 @@ import TestimonialsCard from "@/Component/Admin/ContentManagement/Testimonials/T
 import TestimonialsTable from "@/Component/Admin/ContentManagement/Testimonials/TestimonialsTable";
 import SupportCard from "@/Component/Admin/ContentManagement/Support/SupportCard";
 import SupportTable from "@/Component/Admin/ContentManagement/Support/SupportTable";
+import { useGetAdminSupportQuery, useGetAdminTestimonialQuery } from "@/services/admin-dashboard/dashboard";
 
 export default function ContentManagement() {
   const [activeTab, setActiveTab] = useState("News");
+
+  const { data: supportData } = useGetAdminSupportQuery();
+    const { data: testimonialData } = useGetAdminTestimonialQuery();
+
+  console.log(testimonialData, "testimonialData");
+
   const tabs = [
     { label: "News & Announcements", value: "News", icon: <LuNewspaper /> },
     {
@@ -77,8 +84,8 @@ export default function ContentManagement() {
 
       {activeTab === "Support" && (
         <>
-          <SupportCard />
-          <SupportTable />
+          <SupportCard supportData={supportData} />
+          <SupportTable supportData={supportData?.data} />
         </>
       )}
     </div>

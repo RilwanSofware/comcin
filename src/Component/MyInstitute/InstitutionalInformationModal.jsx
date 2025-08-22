@@ -5,16 +5,14 @@ import { MdOutlineCancelPresentation } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import CustomInput from "../CustomInput";
 
-const states = ["Lagos", "Abuja", "Kano", "Enugu", "Oyo", "Kaduna"]; // Example
+const states = ["Lagos", "Abuja", "Kano", "Enugu", "Oyo", "Kaduna"];
 
 export default function InstitutionalInformationModal({
   onClose,
   initialData,
-  personalInfo
+  personalInfo,
 }) {
- 
-
-   const mappedDefaults = initialData
+  const mappedDefaults = initialData
     ? {
         institutionName: initialData.institution_name || "",
         institutionType: initialData.institution_type || "",
@@ -32,25 +30,24 @@ export default function InstitutionalInformationModal({
       }
     : {};
 
-     const [charCount, setCharCount] = useState(
+  const [charCount, setCharCount] = useState(
     mappedDefaults.briefDescription?.length || 0
   );
 
-  console.log(initialData, "latest")
+  console.log(initialData, "latest");
 
   const handleDescriptionChange = (e) => {
     const value = e.target.value;
     setCharCount(value.length);
   };
 
-   const {
+  const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
     defaultValues: mappedDefaults,
   });
-
 
   const onSubmit = (data) => {
     console.log("Submitted Data:", data);
@@ -104,18 +101,16 @@ export default function InstitutionalInformationModal({
                 Institution Type <span className="text-red-500">*</span>
               </label>
               <div className="flex space-x-4">
-                {["Microfinance", "Cooperative", "Other"].map(
-                  (type) => (
-                    <label key={type} className="flex items-center gap-2">
-                      <input
-                        type="radio"
-                        value={type}
-                        {...register("institutionType", { required: true })}
-                      />
-                      {type}
-                    </label>
-                  )
-                )}
+                {["Microfinance", "Cooperative", "Other"].map((type) => (
+                  <label key={type} className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      value={type}
+                      {...register("institutionType", { required: true })}
+                    />
+                    {type}
+                  </label>
+                ))}
               </div>
               {errors.institutionType && (
                 <p className="text-xs text-red-500 mt-1">

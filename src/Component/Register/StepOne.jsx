@@ -110,7 +110,6 @@ export default function StepOne({ register, errors, watch }) {
         )}
       </div>
 
-
       <CustomInput
         label="Head Office Address"
         name="head_office"
@@ -119,7 +118,7 @@ export default function StepOne({ register, errors, watch }) {
         errors={errors}
         placeholder="Full address"
       />
-       <CustomInput
+      <CustomInput
         label="Bussiness Operational Address"
         name="business_operation_address"
         register={register}
@@ -148,7 +147,7 @@ export default function StepOne({ register, errors, watch }) {
       />
 
       <CustomInput
-        label="Website URL (if available)"
+        label="Website URL (if available) (include https://www)"
         name="website_url"
         register={register}
         required={false}
