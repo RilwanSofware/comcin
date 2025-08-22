@@ -35,6 +35,9 @@ export const memberDashboardApi = createApi({
      getMemberDashboardTickets: builder.query({
       query: () => "/member/support/tickets",
     }),
+     getMemberDashboardEditUser: builder.query({
+      query: () => "/member/edit-institution",
+    }),
     createSupport: builder.mutation({
       query: (data) => ({
         url: "/member/support/tickets",
@@ -51,5 +54,6 @@ export const { useGetMemberDashboardQuery,
   useGetMemberDashboardFinacialsQuery,
   useGetMemberDashboardNotificationQuery,
 useGetMemberDashboardTicketsQuery,
-useCreateSupportMutation
+useCreateSupportMutation,
+useGetMemberDashboardEditUserQuery
  } = memberDashboardApi;

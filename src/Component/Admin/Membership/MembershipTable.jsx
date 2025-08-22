@@ -7,9 +7,13 @@ import {
 import { HiOutlineEye } from "react-icons/hi";
 import { MdCancel } from "react-icons/md";
 import { useState } from "react";
+import ApplicationModal from "./ApplicationModal";
 
 export default function MembershipTable({ data }) {
   const [activeTab, setActiveTab] = useState("pending");
+  const [showModal, setShowModal] = useState(false);
+  const [selectedApplication, setSelectedApplication] = useState(null);
+
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
 
@@ -28,6 +32,11 @@ export default function MembershipTable({ data }) {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
     }
+  };
+
+  const handleApplicationModal = (item) => {
+    setSelectedApplication(item);
+    setShowModal(true);
   };
 
   return (
@@ -132,7 +141,10 @@ export default function MembershipTable({ data }) {
               </td>
               <td className="px-4 py-3">{item.status}</td>
               <td className="px-4 py-3 text-center">
-                <button className="text-[#0A8625] text-sm">
+                <button
+                  onClick={() => handleApplicationModal(item)}
+                  className="text-[#0A8625] text-sm"
+                >
                   <HiOutlineEye className="text-xl" />
                 </button>
               </td>
@@ -180,6 +192,13 @@ export default function MembershipTable({ data }) {
           </button>
         </div>
       </div>
+
+      {showModal && (
+        <ApplicationModal
+          onClose={() => setShowModal(false)}
+          initialData={selectedApplication}
+        />
+      )}
     </div>
   );
 }

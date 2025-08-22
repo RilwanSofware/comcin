@@ -29,7 +29,7 @@ export default function StepThree({ register, errors, watch }) {
         label="Certificate of Registration / Business Name (CAC/State)"
         name="certificate_of_registration"
         register={register}
-        required
+        required={true}
         errors={errors}
       />
 
@@ -37,7 +37,7 @@ export default function StepThree({ register, errors, watch }) {
         label="Operational Licence"
         name="operational_license"
         register={register}
-        required
+        required={true}
         errors={errors}
       />
 
@@ -45,7 +45,7 @@ export default function StepThree({ register, errors, watch }) {
         label="Constitution / Bye-laws"
         name="constitution"
         register={register}
-        required
+        required={false}
         errors={errors}
       />
 
@@ -53,7 +53,7 @@ export default function StepThree({ register, errors, watch }) {
         label="Latest Annual Report or Financial Statement (last 1 year)"
         name="latest_annual_report"
         register={register}
-        required
+        required={false}
         errors={errors}
       />
 
@@ -62,7 +62,7 @@ export default function StepThree({ register, errors, watch }) {
           label="Letter of Intent / Interest to join COMCIN"
           name="letter_of_intent"
           register={register}
-          required
+          required={false}
           errors={errors}
         />
         <p className="text-right text-sm italic text-gray-500">
@@ -74,7 +74,7 @@ export default function StepThree({ register, errors, watch }) {
         label="Board Resolution Approving Membership Application (if applicable)"
         name="board_resolution"
         register={register}
-        required
+        required={false}
         errors={errors}
       />
 
@@ -82,7 +82,7 @@ export default function StepThree({ register, errors, watch }) {
         label="Passport Photograph of Key Contact Person"
         name="passport_photograph"
         register={register}
-        required
+        required={false}
         errors={errors}
       />
 
@@ -93,6 +93,36 @@ export default function StepThree({ register, errors, watch }) {
         required={false}
         errors={errors}
       />
+
+      {/* Bank details section */}
+      <div className="mt-6 p-4 border border-gray-200 rounded-lg bg-gray-50">
+        <h4 className="text-lg font-maven font-semibold mb-2">
+          Bank Payment Details
+        </h4>
+        <p className="text-sm text-gray-700">
+          <span className="font-medium">Account Name:</span> COMCIN
+        </p>
+        <p className="text-sm text-gray-700">
+          <span className="font-medium">Account Number:</span> 0427663684
+        </p>
+        <p className="text-sm text-gray-700">
+          <span className="font-medium">Bank Name:</span> WEMA
+        </p>
+        <p className="text-xs text-gray-500 mt-2 italic">
+          Please make payment to the above account and upload your receipt
+          below.
+        </p>
+      </div>
+
+      {/* Payment Receipt Upload */}
+      <CustomFileUpload
+        label="Payment Receipt"
+        name="payment_receipt"
+        register={register}
+        required={true}
+        errors={errors}
+      />
+
       {/* Category Type */}
       <div className="mt-6">
         <h4 className="text-lg font-maven font-semibold mb-2">Category Type</h4>

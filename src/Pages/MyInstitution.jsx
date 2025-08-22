@@ -7,14 +7,16 @@ import UploadedFiles from "@/Component/MyInstitute/UploadedFiles";
 import {
   useGetMemberDashboardInstitutionQuery,
   useGetMemberDashboardQuery,
+  useGetMemberDashboardEditUserQuery,
 } from "@/services/members/dashboardmember";
 import Loader from "@/Component/Loader";
 
 export default function MyInstitution() {
   const { data, isLoading } = useGetMemberDashboardInstitutionQuery();
   const { data: personalInfo } = useGetMemberDashboardQuery();
+  const { data: edituser } = useGetMemberDashboardEditUserQuery();
 
-  console.log("personalInfo", personalInfo);
+  console.log("edituser", edituser);
 
   if (isLoading) {
     return <Loader />;

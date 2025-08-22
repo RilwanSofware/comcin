@@ -153,7 +153,6 @@ export default function StepOne({ register, errors, watch }) {
         register={register}
         required={false}
         errors={errors}
-        // type="url"
         placeholder="https://example.com"
       />
 

@@ -26,6 +26,9 @@ export const adminDashboardApi = createApi({
     getAdminInstitution: builder.query({
       query: () => "/admin/institutions",
     }),
+    getAdminSingleApplication: builder.query({
+      query: ({ user_id }) => `/admin/applications/${user_id}`,
+    }),
   }),
 });
 
@@ -33,4 +36,5 @@ export const {
   useGetDashboardQuery,
   useGetAdminMembershipsQuery,
   useGetAdminInstitutionQuery,
+  useGetAdminSingleApplicationQuery
 } = adminDashboardApi;

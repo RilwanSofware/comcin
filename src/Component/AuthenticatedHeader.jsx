@@ -69,8 +69,8 @@ export default function AuthenticatedHeader() {
                 className="absolute right-0 top-12 w-48 bg-white rounded-md shadow-lg py-1 z-20 border border-gray-100"
                 onClick={(e) => e.stopPropagation()}
               >
-                <DropdownLink to="/profile">Profile</DropdownLink>
-                <DropdownLink to="/settings">Settings</DropdownLink>
+                {/* <DropdownLink to="/profile">Profile</DropdownLink>
+                <DropdownLink to="/settings">Settings</DropdownLink> */}
                 <button
                   onClick={handleLogout}
                   className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
