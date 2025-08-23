@@ -8,8 +8,9 @@ import { HiOutlineEye } from "react-icons/hi";
 import { MdCancel } from "react-icons/md";
 import { useState } from "react";
 import ApplicationModal from "./ApplicationModal";
+import { statusStyles } from "@/utils";
 
-export default function MembershipTable({ data }) {
+export default function MembershipTable({ data, refetch }) {
   const [activeTab, setActiveTab] = useState("pending");
   const [showModal, setShowModal] = useState(false);
   const [selectedApplication, setSelectedApplication] = useState(null);
@@ -17,13 +18,41 @@ export default function MembershipTable({ data }) {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
 
+  // Filter states
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+
   const applications =
     activeTab === "pending"
       ? data?.pending_applications || []
       : data?.all_applications || [];
 
-  const totalPages = Math.ceil(applications.length / itemsPerPage);
-  const paginatedData = applications.slice(
+  // Filtering logic
+  const filteredApplications = applications.filter((item) => {
+    // Search by institution name or registration number
+    const searchMatch =
+      item.institution_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.registration_number?.toLowerCase().includes(searchTerm.toLowerCase());
+
+    // Status filter
+    const statusMatch = statusFilter
+      ? item.status?.toLowerCase() === statusFilter.toLowerCase()
+      : true;
+
+    // Date filter
+    const createdDate = item.created_at
+      ? new Date(item.created_at)
+      : null;
+    const startMatch = startDate ? createdDate >= new Date(startDate) : true;
+    const endMatch = endDate ? createdDate <= new Date(endDate) : true;
+
+    return searchMatch && statusMatch && startMatch && endMatch;
+  });
+
+  const totalPages = Math.ceil(filteredApplications.length / itemsPerPage);
+  const paginatedData = filteredApplications.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
@@ -75,22 +104,53 @@ export default function MembershipTable({ data }) {
             <FaSearch className="absolute left-3 top-2.5 text-gray-400 text-sm" />
             <input
               type="text"
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
               placeholder="Search by institution name or registration number..."
               className="pl-9 pr-3 py-2 text-sm border rounded w-full"
             />
           </div>
 
           <div className="flex gap-2 items-center flex-wrap">
-            <select className="border px-2 py-2 text-sm rounded text-gray-700">
+            <select
+              className="border px-2 py-2 text-sm rounded text-gray-700"
+              value={statusFilter}
+              onChange={(e) => {
+                setStatusFilter(e.target.value);
+                setCurrentPage(1);
+              }}
+            >
               <option value="">All Status</option>
-              <option value="Paid">Paid</option>
               <option value="Pending">Pending</option>
-              <option value="Overdue">Overdue</option>
-              <option value="Failed">Failed</option>
+              <option value="Approved">Approved</option>
+              <option value="Rejected">Reject</option>
             </select>
-            <input type="date" className="border px-2 py-2 text-sm rounded" />
-            <input type="date" className="border px-2 py-2 text-sm rounded" />
-            <button className="bg-[#0A8625] text-white px-4 py-2 rounded text-sm">
+            <input
+              type="date"
+              className="border px-2 py-2 text-sm rounded"
+              value={startDate}
+              onChange={(e) => {
+                setStartDate(e.target.value);
+                setCurrentPage(1);
+              }}
+            />
+            <input
+              type="date"
+              className="border px-2 py-2 text-sm rounded"
+              value={endDate}
+              onChange={(e) => {
+                setEndDate(e.target.value);
+                setCurrentPage(1);
+              }}
+            />
+            <button
+              className="bg-[#0A8625] text-white px-4 py-2 rounded text-sm"
+              onClick={() => setCurrentPage(1)}
+              type="button"
+            >
               Filter
             </button>
           </div>
@@ -139,7 +199,15 @@ export default function MembershipTable({ data }) {
                 {" "}
                 {new Date(item.created_at).toLocaleDateString()}
               </td>
-              <td className="px-4 py-3">{item.status}</td>
+              <td className={`px-4 py-3`}>
+                <span
+                  className={`p-1 px-4 rounded ${ 
+                    statusStyles[item.status?.toLowerCase()] || ""
+                  } `}
+                >
+                  {item.status}
+                </span>
+              </td>
               <td className="px-4 py-3 text-center">
                 <button
                   onClick={() => handleApplicationModal(item)}
@@ -157,8 +225,8 @@ export default function MembershipTable({ data }) {
       <div className="flex justify-between items-center px-4 py-3 text-sm text-gray-600">
         <span>
           Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
-          {Math.min(currentPage * itemsPerPage, applications.length)} of{" "}
-          {applications.length} applications
+          {Math.min(currentPage * itemsPerPage, filteredApplications.length)} of{" "}
+          {filteredApplications.length} applications
         </span>
         <div className="flex gap-1 items-center">
           <button
@@ -197,6 +265,7 @@ export default function MembershipTable({ data }) {
         <ApplicationModal
           onClose={() => setShowModal(false)}
           initialData={selectedApplication}
+          refetch={refetch}
         />
       )}
     </div>

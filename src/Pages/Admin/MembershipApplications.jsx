@@ -6,7 +6,7 @@ import { useGetAdminMembershipsQuery } from "@/services/admin-dashboard/dashboar
 import Loader from "@/Component/Loader";
 
 export default function MembershipApplications() {
-  const { data, isLoading } = useGetAdminMembershipsQuery();
+  const { data, isLoading, refetch } = useGetAdminMembershipsQuery();
 
 
     // Show loader while fetching data
@@ -32,7 +32,7 @@ export default function MembershipApplications() {
       </div>
 
       <MemberStatCard cardsData={data?.data?.totals} />
-      <MembershipTable data={data?.data?.lists} />
+      <MembershipTable data={data?.data?.lists} refetch={refetch} />
     </div>
   );
 }

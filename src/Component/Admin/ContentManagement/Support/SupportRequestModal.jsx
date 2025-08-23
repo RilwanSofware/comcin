@@ -48,7 +48,7 @@ export default function SupportRequestModal({
       })
     : "";
 
-  console.log("initialData:", initialData);
+  // console.log("initialData:", initialData);
 
   // Handle submit
   const onSubmit = async (data) => {
@@ -56,7 +56,7 @@ export default function SupportRequestModal({
       try {
         await approveRequestSuport({
           user_id: initialData?.user_id,
-          action: "approve",
+          data: { action: "approve" },
         }).unwrap();
         toast.success("Support request marked as resolved!");
         onClose();

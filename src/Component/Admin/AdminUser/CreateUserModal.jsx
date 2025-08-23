@@ -4,16 +4,33 @@ import { useForm } from "react-hook-form";
 import { BsCheck2Circle } from "react-icons/bs";
 import { FaRegTimesCircle } from "react-icons/fa";
 import { MdOutlineCancelPresentation } from "react-icons/md";
+import { useCreateAdminMutation } from "@/services/admin-dashboard/dashboard";
+import toast from "react-hot-toast";
 
-export default function CreateUserModal({ onClose }) {
+export default function CreateUserModal({ onClose, refetch }) {
+  const [createAdmin, { isLoading }] = useCreateAdminMutation();
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log("Submitted Data:", data);
+  const password = watch("password");
+
+  const onSubmit = async (data) => {
+    if (data.password !== data.password_confirmation) {
+      toast.error("Passwords do not match!");
+      return;
+    }
+    try {
+      await createAdmin(data).unwrap();
+      toast.success("Admin created successfully!");
+      onClose();
+      refetch();
+    } catch (error) {
+      toast.error(error?.data?.message || "Failed to create admin");
+    }
   };
 
   return (
@@ -34,40 +51,20 @@ export default function CreateUserModal({ onClose }) {
           onSubmit={handleSubmit(onSubmit)}
           className="rounded border border-[#E9EEEA] p-4 space-y-2"
         >
-          {/* Full Name & Last Name */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Full Name */}
+          <div className="grid grid-cols-1">
             <CustomInput
               label="Full Name"
-              name="fullName"
+              name="name"
               register={register}
               required={true}
               placeholder="Enter full name"
               errors={errors}
             />
-            <CustomInput
-              label="Last Name"
-              name="lastName"
-              register={register}
-              required={true}
-              placeholder="Enter last name"
-              errors={errors}
-            />
           </div>
 
-          {/* Username */}
-          <div>
-            <CustomInput
-              label="Username"
-              name="username"
-              register={register}
-              required={true}
-              placeholder="Enter username"
-              errors={errors}
-            />
-          </div>
-
-          {/* Email & Phone */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Email */}
+          <div className="grid grid-cols-1">
             <CustomInput
               label="Email"
               name="email"
@@ -77,19 +74,10 @@ export default function CreateUserModal({ onClose }) {
               placeholder="e.g. contact@institution.com"
               errors={errors}
             />
-            <CustomInput
-              label="Phone Number"
-              name="phone"
-              type="tel"
-              register={register}
-              required={true}
-              placeholder="+234 801 234 5678"
-              errors={errors}
-            />
           </div>
 
-          {/* Role & Status Dropdowns */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Role Dropdown */}
+          <div className="grid grid-cols-1 gap-4">
             <div>
               <label className="block text-sm font-medium mb-1">Role</label>
               <select
@@ -105,23 +93,34 @@ export default function CreateUserModal({ onClose }) {
                 <span className="text-red-500 text-sm">Role is required</span>
               )}
             </div>
-
-            <div>
-              <label className="block text-sm font-medium mb-1">Status</label>
-              <select
-                {...register("status", { required: true })}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none"
-              >
-                <option value="">Select status</option>
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
-                <option value="suspended">Suspended</option>
-              </select>
-              {errors.status && (
-                <span className="text-red-500 text-sm">Status is required</span>
-              )}
-            </div>
           </div>
+
+          {/* Password */}
+          <CustomInput
+            label="Password"
+            name="password"
+            type="password"
+            register={register}
+            required={true}
+            placeholder="Enter password"
+            errors={errors}
+          />
+
+          {/* Password Confirmation */}
+          <CustomInput
+            label="Confirm Password"
+            name="password_confirmation"
+            type="password"
+            register={register}
+            required={true}
+            placeholder="Re-enter password"
+            errors={errors}
+          />
+          {errors.password_confirmation && (
+            <span className="text-red-500 text-sm">
+              Password confirmation is required
+            </span>
+          )}
 
           {/* Buttons */}
           <div className="flex justify-end gap-4 pt-4">
@@ -138,7 +137,7 @@ export default function CreateUserModal({ onClose }) {
               className="flex items-center gap-2  bg-[#0A8625] text-white px-6 py-2 rounded border border-[#B3D9BB] hover:bg-green-700 transition"
             >
               <BsCheck2Circle size={18} />
-              Create Admin
+              {isLoading ? "Creating..." : "Create Admin"}
             </button>
           </div>
         </form>

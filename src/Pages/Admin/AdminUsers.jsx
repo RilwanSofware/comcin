@@ -8,9 +8,21 @@ import { HiOutlinePlusCircle } from "react-icons/hi";
 import { LuArrowDownToLine } from "react-icons/lu";
 import { useState } from "react";
 import CreateUserModal from "@/Component/Admin/AdminUser/CreateUserModal";
+import { useGetAdminUserQuery } from "@/services/admin-dashboard/dashboard";
 
 export default function AdminUsers() {
   const [showModal, setShowModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+  const { data: allUsers, refetch } = useGetAdminUserQuery({
+    page: currentPage,
+  });
+
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -30,9 +42,22 @@ export default function AdminUsers() {
           <HiOutlinePlusCircle /> Create Admin
         </button>
       </div>
-      <AdminUsersTable />
+      <AdminUsersTable
+        setCurrentPage={setCurrentPage}
+        currentPage={currentPage}
+        allUsers={allUsers}
+        itemsPerPage={itemsPerPage}
+        handlePageChange={handlePageChange}
+                  refetch={refetch}
 
-      {showModal && <CreateUserModal onClose={() => setShowModal(false)} />}
+      />
+
+      {showModal && (
+        <CreateUserModal
+          refetch={refetch}
+          onClose={() => setShowModal(false)}
+        />
+      )}
     </div>
   );
 }

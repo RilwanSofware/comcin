@@ -6,15 +6,47 @@ import CreateNewsModal from "../News/CreateNewsModal";
 import SupportRequestModal from "./SupportRequestModal";
 import { useGetAdminSupportQuery } from "@/services/admin-dashboard/dashboard";
 
+// Status color styles
+const statusStyles = {
+  pending: "bg-[#FFEDD5] text-[#9A3412]",
+  resolved: "bg-[#DCFCE7] text-[#166534]",
+  cancelled: "bg-[#FEE2E2] text-[#991B1B]",
+};
+
 export default function SupportTable({ supportData }) {
   const [showModal, setShowModal] = useState(false);
-  const [mode, setMode] = useState("create"); // "create" or "edit"
+  const [mode, setMode] = useState("create");
   const [selectedSupport, setSelectedSupport] = useState(null);
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 3;
 
-  const filteredPayments = supportData?.data || [];
+  // Filter states
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+
+  // Filtering logic
+  const filteredPayments = (supportData?.data || []).filter((item) => {
+    // Search by name, user_id, or message
+    const searchMatch =
+      item.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.user_id?.toString().includes(searchTerm) ||
+      item.message?.toLowerCase().includes(searchTerm.toLowerCase());
+
+    // Status filter
+    const statusMatch = statusFilter
+      ? item.status?.toLowerCase() === statusFilter.toLowerCase()
+      : true;
+
+    // Date filter
+    const createdDate = item.created_at ? new Date(item.created_at) : null;
+    const startMatch = startDate ? createdDate >= new Date(startDate) : true;
+    const endMatch = endDate ? createdDate <= new Date(endDate) : true;
+
+    return searchMatch && statusMatch && startMatch && endMatch;
+  });
 
   const totalPages = Math.ceil(filteredPayments.length / itemsPerPage);
   const paginatedData = filteredPayments.slice(
@@ -49,38 +81,60 @@ export default function SupportTable({ supportData }) {
         </h2>
       </div>
 
-      {/* Filters Shared */}
+      {/* Filters */}
       <div className="p-4">
         <div className="flex flex-wrap gap-2 justify-between items-center">
           <div className="relative w-96">
             <FaSearch className="absolute left-3 top-2.5 text-gray-400 text-sm" />
             <input
               type="text"
-              placeholder={
-                "Search by institution name or registration number..."
-              }
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
+              placeholder="Search by name, user ID or message..."
               className="pl-9 pr-3 py-2 text-sm border rounded w-full"
             />
           </div>
 
           <div className="flex gap-2 items-center flex-wrap">
-            <select className="border px-2 py-2 text-sm rounded text-gray-700">
+            <select
+              className="border px-2 py-2 text-sm rounded text-gray-700"
+              value={statusFilter}
+              onChange={(e) => {
+                setStatusFilter(e.target.value);
+                setCurrentPage(1);
+              }}
+            >
               <option value="">All Status</option>
-              <option value="Paid">Paid</option>
               <option value="Pending">Pending</option>
-              <option value="Overdue">Overdue</option>
-              <option value="Failed">Failed</option>
+              <option value="Resolved">Resolved</option>
+              <option value="Cancelled">Cancelled</option>
             </select>
-
-            <select className="border px-2 py-2 text-sm rounded text-gray-700">
-              <option value="">All Payment Type</option>
-              <option value="Annual Levy">Annual Levy</option>
-              <option value="Registration Fee">Registration Fee</option>
-            </select>
-
-            <input type="date" className="border px-2 py-2 text-sm rounded" />
-            <input type="date" className="border px-2 py-2 text-sm rounded" />
-            <button className="bg-[#0A8625] text-white px-4 py-2 rounded text-sm">
+            <input
+              type="date"
+              className="border px-2 py-2 text-sm rounded"
+              value={startDate}
+              onChange={(e) => {
+                setStartDate(e.target.value);
+                setCurrentPage(1);
+              }}
+            />
+            <input
+              type="date"
+              className="border px-2 py-2 text-sm rounded"
+              value={endDate}
+              onChange={(e) => {
+                setEndDate(e.target.value);
+                setCurrentPage(1);
+              }}
+            />
+            <button
+              className="bg-[#0A8625] text-white px-4 py-2 rounded text-sm"
+              onClick={() => setCurrentPage(1)}
+              type="button"
+            >
               Filter
             </button>
           </div>
@@ -113,7 +167,15 @@ export default function SupportTable({ supportData }) {
                     {item.message}
                   </span>
                 </td>
-                <td className="px-4 py-3">{item.status}</td>
+                <td className="px-4 py-3">
+                  <span
+                    className={`p-1 px-4 rounded font-semibold ${
+                      statusStyles[item.status?.toLowerCase()] || ""
+                    }`}
+                  >
+                    {item.status}
+                  </span>
+                </td>
                 <td className="px-4 py-3">
                   {item.created_at
                     ? new Date(item.created_at).toLocaleDateString()
@@ -135,8 +197,9 @@ export default function SupportTable({ supportData }) {
 
       <div className="flex justify-between items-center px-4 py-3 text-sm text-gray-600">
         <span>
-          Showing 1 to {filteredPayments.length} of {filteredPayments.length}{" "}
-          applications
+          Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
+          {Math.min(currentPage * itemsPerPage, filteredPayments.length)} of{" "}
+          {filteredPayments.length} applications
         </span>
         <div className="flex gap-1 items-center">
           <button

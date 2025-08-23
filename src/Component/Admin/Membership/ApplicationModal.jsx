@@ -11,14 +11,12 @@ import {
 import RejectForm from "./RejectForm";
 import toast from "react-hot-toast";
 
-export default function ApplicationModal({ onClose, initialData }) {
+export default function ApplicationModal({ onClose, initialData, refetch }) {
   const [showRejectForm, setShowRejectForm] = useState(false);
   const [approveRequest, { isLoading }] = useApproveRequestMutation();
 
-  const { data: singleApp } = useGetAdminSingleApplicationQuery({
-    user_id: initialData?.user_id,
-  });
-  console.log("singleApp", singleApp);
+
+
 
   const {
     register,
@@ -38,10 +36,14 @@ export default function ApplicationModal({ onClose, initialData }) {
     try {
       await approveRequest({
         user_id: initialData?.user_id,
-        action: "approve",
+        data: {
+          user_id: initialData?.user_id,
+          action: "approve",
+        },
       }).unwrap();
       toast.success("Application approved successfully");
       onClose();
+      refetch();
     } catch (error) {
       console.error(error);
 
@@ -59,19 +61,23 @@ export default function ApplicationModal({ onClose, initialData }) {
     try {
       await approveRequest({
         user_id: initialData?.user_id,
-        action: "reject",
-        rejection_reason: data.rejection_reason,
+        data: {
+          user_id: initialData?.user_id,
+          action: "reject",
+          rejection_reason: data.rejection_reason,
+        },
       }).unwrap();
       toast.success("Application rejected successfully");
       setShowRejectForm(false);
       onClose();
+      refetch();
     } catch (error) {
       console.error(error);
       toast.error(error?.data?.message || "Failed to reject application");
     }
   };
 
-  console.log(initialData);
+  // console.log(initialData);
 
   return (
     <div className="fixed inset-0 z-50 bg-black bg-opacity-30 flex justify-center items-center px-4">
@@ -117,13 +123,21 @@ export default function ApplicationModal({ onClose, initialData }) {
                     {initialData?.institution_name}
                   </h2>
                 </div>
-                {initialData?.status === "pending" ? (
+                {initialData?.status === "pending" && (
                   <span className="text-xs inline-block mt-2 px-3 py-1 rounded bg-[#FFEDD5] text-[#C2410C] font-medium">
                     Pending Review
                   </span>
-                ) : (
+                )}
+
+                {initialData?.status === "approved" && (
                   <span className="text-xs inline-block mt-2 px-3 py-1 border border-[#8EC79B] rounded bg-[#0A8625] text-white font-medium">
-                    Approved{" "}
+                    Approved
+                  </span>
+                )}
+
+                {initialData?.status === "rejected" && (
+                  <span className="text-xs inline-block mt-2 px-3 py-1 border border-red-400 rounded bg-red-100 text-red-700 font-medium">
+                    Rejected
                   </span>
                 )}
               </div>
@@ -380,7 +394,7 @@ export default function ApplicationModal({ onClose, initialData }) {
               className="flex items-center gap-2 bg-[#0A8625] text-white px-6 py-2 rounded hover:bg-green-700"
             >
               <BsPatchCheck size={18} />
-              Approve Member
+              {isLoading ? "Approving..." : "Approve Member"}
             </button>
           </div>
         </form>

@@ -9,76 +9,40 @@ import { HiOutlineEye } from "react-icons/hi";
 import { MdCancel } from "react-icons/md";
 import EditUserModals from "./EditUserModals";
 
-export default function AdminUsersTable() {
-  const allUsers = [
-    {
-      name: "Oluwagbemiga Christy",
-      role: "Membership Review",
-      email: "admin@test.com",
-      status: "Active",
-      state: "lagos",
-      lastActivity: "Online",
-      createdOn: "15 Jan 2025",
-    },
-    {
-      name: "Jane Doe",
-      role: "Super Admin",
-      email: "admin@test.com",
-      status: "Inactive",
-      state: "lagos",
-      lastActivity: "state",
-      createdOn: "1/31/2024",
-    },
-    {
-      name: "Mary Johnson",
-      role: "Admin",
-      email: "admin@test.com",
-      status: "Active",
-      state: "lagos",
-      lastActivity: "state",
-      createdOn: "1/31/2024",
-    },
-    {
-      name: "Lagos State Cooperative",
-      role: "Cooperative Society",
-      email: "admin@test.com",
-      status: "Suspended",
-      state: "lagos",
-      lastActivity: "state",
-      createdOn: "1/31/2024",
-    },
-  ];
+export default function AdminUsersTable({
+  allUsers,
+  currentPage,
+  itemsPerPage,
+  handlePageChange,
+  setCurrentPage,
+  refetch,
+}) {
   const [selectedUser, setSelectedUser] = useState(null);
 
   const [searchTerm, setSearchTerm] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
 
-  // Filter logic
-  const filteredPayments = allUsers.filter((p) => {
-    const searchMatch = p.name.toLowerCase().includes(searchTerm.toLowerCase());
+  console.log(allUsers, "allusers");
 
+  const usersArray = Array.isArray(allUsers?.data) ? allUsers.data : [];
+
+  const filteredUsers = usersArray.filter((p) => {
+    const searchMatch = p.name
+      ?.toLowerCase()
+      .includes(searchTerm.toLowerCase());
     const typeMatch = typeFilter ? p.type === typeFilter : true;
     const categoryMatch = categoryFilter ? p.category === categoryFilter : true;
     const statusMatch = statusFilter ? p.status === statusFilter : true;
-
     return searchMatch && typeMatch && categoryMatch && statusMatch;
   });
 
-  const totalPages = Math.ceil(filteredPayments.length / itemsPerPage);
-  const paginatedData = filteredPayments.slice(
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+  const paginatedData = filteredUsers.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-
-  const handlePageChange = (page) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
-  };
 
   return (
     <div className="bg-white rounded-lg pb-2">
@@ -204,8 +168,8 @@ export default function AdminUsersTable() {
       <div className="flex justify-between items-center px-4 py-3 text-sm text-gray-600">
         <span>
           Showing {(currentPage - 1) * itemsPerPage + 1} to{" "}
-          {Math.min(currentPage * itemsPerPage, filteredPayments.length)} of{" "}
-          {filteredPayments.length} applications
+          {Math.min(currentPage * itemsPerPage, filteredUsers.length)} of{" "}
+          {filteredUsers.length} Admin Users
         </span>
         <div className="flex gap-1 items-center">
           <button
@@ -242,6 +206,7 @@ export default function AdminUsersTable() {
       {selectedUser && (
         <EditUserModals
           user={selectedUser}
+          refetch={refetch}
           onClose={() => setSelectedUser(null)}
         />
       )}{" "}

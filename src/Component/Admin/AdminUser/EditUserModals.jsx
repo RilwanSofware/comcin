@@ -4,8 +4,11 @@ import { useForm } from "react-hook-form";
 import { BsCheck2Circle } from "react-icons/bs";
 import { FaRegTimesCircle } from "react-icons/fa";
 import { MdOutlineCancelPresentation } from "react-icons/md";
+import { useUpdateAdminMutation } from "@/services/admin-dashboard/dashboard";
 
-export default function EditUserModals({ onClose, user }) {
+export default function EditUserModals({ onClose, user, refetch }) {
+  const [updateAdmin, { isLoading }] = useUpdateAdminMutation();
+
   const {
     register,
     handleSubmit,
