@@ -13,7 +13,7 @@ import Loader from "@/Component/Loader";
 
 export default function MyInstitution() {
   const { data, isLoading } = useGetMemberDashboardInstitutionQuery();
-  const { data: personalInfo } = useGetMemberDashboardQuery();
+  const { data: personalInfo , refetch} = useGetMemberDashboardQuery();
   const { data: edituser } = useGetMemberDashboardEditUserQuery();
 
   console.log("edituser", edituser);
@@ -37,7 +37,7 @@ export default function MyInstitution() {
         <div className="grid grid-cols-1 lg:grid-cols-[3fr_2fr] gap-6 mt-6 px-4">
           {/* Left Column: Profile + Institutional Info */}
           <div className="flex flex-col">
-            <InstitutionProfile personalInfo={personalInfo} />
+            <InstitutionProfile personalInfo={personalInfo} refetch={refetch} />
             <InstitutionalInformation
               institution={data}
               personalInfo={personalInfo}

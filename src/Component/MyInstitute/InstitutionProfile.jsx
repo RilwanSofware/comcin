@@ -4,8 +4,10 @@ import category from "@/assets/neat.png";
 import { FiEdit3 } from "react-icons/fi";
 import EditInstitutionMediaModal from "@/Component/MyInstitute/EditInstitutionMediaModal";
 
-export default function InstitutionProfile({ personalInfo }) {
+export default function InstitutionProfile({ personalInfo, refetch }) {
   const [showModal, setShowModal] = useState(false);
+
+  console.log("personalInfo", personalInfo);
 
   const institution = personalInfo?.user?.institution;
 
@@ -62,7 +64,7 @@ export default function InstitutionProfile({ personalInfo }) {
       </div>
 
       {showModal && (
-        <EditInstitutionMediaModal onClose={() => setShowModal(false)} />
+        <EditInstitutionMediaModal refetch={refetch} onClose={() => setShowModal(false)} />
       )}
     </>
   );

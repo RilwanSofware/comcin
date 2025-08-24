@@ -20,22 +20,30 @@ export const memberDashboardApi = createApi({
     getMemberDashboard: builder.query({
       query: () => "/member/dashboard",
     }),
-     getMemberDashboardInstitution: builder.query({
+    getMemberDashboardInstitution: builder.query({
       query: () => "/member/institution",
     }),
     getMemberDashboardCert: builder.query({
       query: () => "/member/certificates",
     }),
-     getMemberDashboardFinacials: builder.query({
+    getMemberDashboardFinacials: builder.query({
       query: () => "/member/financials",
     }),
-      getMemberDashboardNotification: builder.query({
+    getMemberDashboardNotification: builder.query({
       query: () => "/member/notifications",
     }),
-     getMemberDashboardTickets: builder.query({
+    ReadNotification: builder.mutation({
+      query: (data) => ({
+        url: "/member/notifications/mark-as-read",
+        method: "POST",
+        body: data,
+      }),
+    }),
+
+    getMemberDashboardTickets: builder.query({
       query: () => "/member/support/tickets",
     }),
-     getMemberDashboardEditUser: builder.query({
+    getMemberDashboardEditUser: builder.query({
       query: () => "/member/edit-institution",
     }),
     createSupport: builder.mutation({
@@ -48,12 +56,14 @@ export const memberDashboardApi = createApi({
   }),
 });
 
-export const { useGetMemberDashboardQuery, 
+export const {
+  useGetMemberDashboardQuery,
   useGetMemberDashboardInstitutionQuery,
   useGetMemberDashboardCertQuery,
   useGetMemberDashboardFinacialsQuery,
   useGetMemberDashboardNotificationQuery,
-useGetMemberDashboardTicketsQuery,
-useCreateSupportMutation,
-useGetMemberDashboardEditUserQuery
- } = memberDashboardApi;
+  useGetMemberDashboardTicketsQuery,
+  useCreateSupportMutation,
+  useGetMemberDashboardEditUserQuery,
+  useReadNotificationMutation
+} = memberDashboardApi;

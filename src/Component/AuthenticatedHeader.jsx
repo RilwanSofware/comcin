@@ -3,18 +3,42 @@ import { Link, NavLink as RouterNavLink, useNavigate } from "react-router-dom";
 import { FiBell, FiChevronDown, FiMenu } from "react-icons/fi";
 import logo from "../assets/logo.png";
 import { HiChevronDown } from "react-icons/hi";
-import { useGetMemberDashboardQuery } from "@/services/members/dashboardmember";
+import {
+  useGetMemberDashboardQuery,
+  useGetMemberDashboardNotificationQuery,
+  useReadNotificationMutation,
+} from "@/services/members/dashboardmember";
 import { getInitials } from "@/utils";
 
 export default function AuthenticatedHeader() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isNotifOpen, setIsNotifOpen] = useState(false);
+
   const { data } = useGetMemberDashboardQuery();
+  const { data: notifications, refetch } =
+    useGetMemberDashboardNotificationQuery();
+  const [readNotification] = useReadNotificationMutation();
+  console.log(notifications);
+
   const navigate = useNavigate();
 
-  console.log(data?.user?.name);
+  // unread count (check view_status OR read_at)
+  const unreadCount = notifications?.filter(
+    (n) => n.view_status === false
+  ).length;
+
+  // Mark as read when clicked
+  const handleNotificationClick = async (notif) => {
+    try {
+      await readNotification({ notification_id: notif.id }).unwrap();
+      refetch();
+      // optionally: refetch notifications if your hook supports it
+    } catch (err) {
+      console.error("Failed to mark notification as read:", err);
+    }
+  };
 
   const handleLogout = () => {
-    console.log("Logging out...");
     sessionStorage.removeItem("token");
     sessionStorage.clear();
     navigate("/login");
@@ -42,9 +66,46 @@ export default function AuthenticatedHeader() {
 
           {/* Notification and Profile */}
           <div className="flex items-center gap-4 relative">
-            <div className="border rounded border-[#E9EEEA] p-1 items-center gap-2 focus:outline-none">
-              <FiBell className="text-xl text-[#0A8625] cursor-pointer" />
+            {/* Notifications */}
+            <div
+              className="relative border rounded border-[#E9EEEA] p-1 cursor-pointer"
+              onClick={() => setIsNotifOpen(!isNotifOpen)}
+            >
+              <FiBell className="text-xl text-[#0A8625]" />
+              {unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                  {unreadCount}
+                </span>
+              )}
             </div>
+
+            {isNotifOpen && (
+              <div className="absolute right-0 top-12 w-80 bg-white rounded-md shadow-lg py-2 z-20 border border-gray-100 max-h-96 overflow-y-auto">
+                {notifications?.length > 0 ? (
+                  notifications.map((notif) => (
+                    <div
+                      key={notif.id}
+                      className={`px-4 py-2 text-sm cursor-pointer ${
+                        notif.view_status === false
+                          ? "bg-gray-50 font-semibold"
+                          : "bg-white"
+                      } hover:bg-gray-100`}
+                      onClick={() => handleNotificationClick(notif)}
+                    >
+                      <p className="text-gray-800">{notif.title}</p>
+                      <p className="text-xs text-gray-500">{notif.content}</p>
+                      <p className="text-[10px] text-gray-400">
+                        {new Date(notif.created_at).toLocaleString()}
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-center text-sm text-gray-500 py-4">
+                    No notifications
+                  </p>
+                )}
+              </div>
+            )}
             <button
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               className="flex border rounded border-[#E9EEEA] p-1 items-center gap-2 focus:outline-none"
