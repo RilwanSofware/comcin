@@ -73,7 +73,7 @@ export default function App() {
           }
         />
         <Route
-          path="/reset-password"
+          path="/reset-password/:id/:code"
           element={
             <GuestRoute>
               <ResetPassword />

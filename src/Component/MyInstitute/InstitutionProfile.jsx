@@ -7,8 +7,6 @@ import EditInstitutionMediaModal from "@/Component/MyInstitute/EditInstitutionMe
 export default function InstitutionProfile({ personalInfo, refetch }) {
   const [showModal, setShowModal] = useState(false);
 
-  console.log("personalInfo", personalInfo);
-
   const institution = personalInfo?.user?.institution;
 
   // Fallbacks

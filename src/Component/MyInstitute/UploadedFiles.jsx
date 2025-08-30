@@ -17,6 +17,8 @@ export default function UploadedFiles({ files }) {
     { label: "Other Supporting Document", key: "other_supporting_document" },
   ];
 
+  console.log(files);
+
   return (
     <div className="bg-white rounded-lg">
       <div className="px-6 py-2 border-b border-[#E9EEEA] ">
@@ -29,7 +31,7 @@ export default function UploadedFiles({ files }) {
 
           const isImage = fileUrl.endsWith(".jpg") || fileUrl.endsWith(".png");
           const fileName = fileUrl.split("/").pop();
-
+          console.log("https://backend.comcin.com.ng/", fileUrl);
           return (
             <li
               key={key}
@@ -44,9 +46,9 @@ export default function UploadedFiles({ files }) {
               </div>
               <div className="flex gap-3 text-[#0F5FC2]">
                 <a
-                  href={fileUrl}
+                  href={"https://backend.comcin.com.ng/" + fileUrl}
                   target="_blank"
-                  rel="noopener noreferrer"
+                  // rel="noopener noreferrer"
                   className="hover:text-blue-700"
                 >
                   <FaEye className="cursor-pointer" />

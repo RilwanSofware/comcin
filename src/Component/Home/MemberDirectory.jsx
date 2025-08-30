@@ -1,62 +1,12 @@
 import { useGetMembersQuery } from "../../services/membersApi";
-import member from "../../assets/member.png";
+import memberImage from "../../assets/member.png";
 import category from "../../assets/neat.png";
+import { Link } from "react-router-dom";
 
 export default function MemberDirectory() {
-  const { data: members, isLoading, error } = useGetMembersQuery();
+  const { data, isLoading, error } = useGetMembersQuery();
 
-  const mockMembers = [
-    {
-      id: 1,
-      name: "N.E.A.T MICROFINANCE BANK",
-      groupImage: member,
-      logo: category,
-    },
-    {
-      id: 2,
-      name: "N.E.A.T MICROFINANCE BANK",
-      groupImage: member,
-      logo: category,
-    },
-    {
-      id: 3,
-      name: "N.E.A.T MICROFINANCE BANK",
-      groupImage: member,
-      logo: category,
-    },
-    {
-      id: 4,
-      name: "N.E.A.T MICROFINANCE BANK",
-      groupImage: member,
-      logo: category,
-    },
-    {
-      id: 5,
-      name: "N.E.A.T MICROFINANCE BANK",
-      groupImage: member,
-      logo: category,
-    },
-    {
-      id: 6,
-      name: "N.E.A.T MICROFINANCE BANK",
-      groupImage: member,
-      logo: category,
-    },
-    {
-      id: 7,
-      name: "N.E.A.T MICROFINANCE BANK",
-      groupImage: member,
-      logo: category,
-    },
-    {
-      id: 8,
-      name: "N.E.A.T MICROFINANCE BANK",
-      groupImage: member,
-      logo: category,
-    },
-  ];
-
-  const displayMembers = members || mockMembers;
+  const displayMembers = data?.members || [];
 
   return (
     <section id="members" className="py-16">
@@ -75,7 +25,7 @@ export default function MemberDirectory() {
         )} */}
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {displayMembers.map((member) => (
+          {displayMembers?.slice(0, 8)?.map((member) => (
             <div
               key={member.id}
               className="bg-white rounded-xl overflow-hidden transition duration-300 relative group"
@@ -83,13 +33,17 @@ export default function MemberDirectory() {
               {/* Image and logo area */}
               <div className="relative h-50 w-full p-2">
                 <img
-                  src={member.groupImage}
+                  src={memberImage}
                   alt="group"
                   className="w-full h-full object-cover rounded-lg"
                   loading="lazy"
                 />
                 <img
-                  src={member.logo}
+                  src={
+                    member.institution_logo
+                      ? `https://backend.comcin.com.ng/${member.institution_logo}`
+                      : memberImage
+                  }
                   alt="logo"
                   className="absolute -bottom-8 left-4 w-16 h-16 bg-white p-1 rounded-full border shadow-md z-10"
                 />
@@ -98,7 +52,7 @@ export default function MemberDirectory() {
               {/* Member name */}
               <div className="mt-4 pt-8 pb-20 px-4 text-left">
                 <h3 className="text-base font-semibold text-gray-800 leading-tight">
-                  {member.name}
+                  {member.institution_name}
                 </h3>
               </div>
 
@@ -109,28 +63,48 @@ export default function MemberDirectory() {
     items-start px-4 text-right pointer-events-none"
               >
                 <img
-                  src={member.logo}
+                  src={
+                    member.institution_logo
+                      ? `https://backend.comcin.com.ng/${member.institution_logo}`
+                      : memberImage
+                  }
                   alt="logo"
                   className="w-12 h-12 mb-2 bg-white p-1 rounded-full border shadow-md"
                 />
-                <p className="text-sm font-semibold">{member.name}</p>
+                <p className="text-sm font-semibold">
+                  {member.institution_name}
+                </p>
                 <div className="space-y-1 w-full text-xs">
                   <div className="flex">
                     <span className="min-w-[90px] text-left">Membership:</span>
-                    <span className="font-bold text-left">Active</span>
+                    <span className="font-bold text-left">
+                      {member?.is_approved ? "Active" : "Inactive"}
+                    </span>
                   </div>
                   <div className="flex">
                     <span className="min-w-[90px] text-left">Joined:</span>
-                    <span className="font-bold text-left">Jan 2023</span>
+                    <span className="font-bold text-left">
+                      {new Date(member?.created_at).toDateString()}
+                    </span>
                   </div>
                   <div className="flex">
                     <span className="min-w-[90px] text-left">State:</span>
-                    <span className="font-bold text-left">Lagos</span>
+                    <span className="font-bold text-left">
+                      {member?.operating_state}
+                    </span>
                   </div>
                 </div>
               </div>
             </div>
           ))}
+        </div>
+        <div className="w-full mt-5 md:w-auto flex justify-end">
+          <Link
+            to={"/members"}
+            className="bg-green-700 text-white px-6 py-2 rounded-md font-semibold transition-colors"
+          >
+            View All Members
+          </Link>
         </div>
       </div>
     </section>

@@ -6,7 +6,7 @@ export default function InstitutionalInformation({
   personalInfo,
 }) {
   const [showModal, setShowModal] = useState(false);
-
+console.log(institution);
   return (
     <div className="bg-white rounded-lg p-6">
       <div className="flex justify-between items-center mb-4">

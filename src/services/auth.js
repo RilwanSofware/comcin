@@ -37,6 +37,13 @@ export const authApi = createApi({
         body: data,
       }),
     }),
+    resetPassword: builder.mutation({
+      query: (data) => ({
+        url: "/reset-password",
+        method: "POST",
+        body: data,
+      }),
+    }),
     VerifyAccount: builder.query({
       query: ({ user_uuid, otp }) => ({
         url: `/verify-email/${user_uuid}/${otp}`,
@@ -53,6 +60,7 @@ export const authApi = createApi({
 export const {
   useLoginMutation,
   useForgotPasswordMutation,
+  useResetPasswordMutation,
   useGetProfileQuery,
   useCreateAccountMutation,
   useLazyVerifyAccountQuery,

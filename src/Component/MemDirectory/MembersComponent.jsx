@@ -1,25 +1,18 @@
 import { useGetMembersQuery } from "../../services/membersApi";
 import { IoFilter } from "react-icons/io5";
-import member from "../../assets/member.png";
+import memberImage from "../../assets/member.png";
 import category from "../../assets/neat.png";
 import { useState } from "react";
 
 export default function MembersComponent() {
-  const { data: members, isLoading } = useGetMembersQuery();
+  const { data, isLoading } = useGetMembersQuery();
 
-  const mockMembers = Array(30).fill({
-    id: 1,
-    name: "N.E.A.T MICROFINANCE BANK",
-    groupImage: member,
-    logo: category,
-  });
-
-  const displayMembers = members || mockMembers;
+  const displayMembers = data?.members || [];
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const membersPerPage = 24;
+  const membersPerPage = 8;
   const filteredMembers = displayMembers.filter((member) =>
-    member.name.toLowerCase().includes(searchTerm.toLowerCase())
+    member.institution_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
   const totalPages = Math.ceil(filteredMembers.length / membersPerPage);
 
@@ -80,13 +73,17 @@ export default function MembersComponent() {
               >
                 <div className="relative h-50 w-full p-2">
                   <img
-                    src={member.groupImage}
+                    src={memberImage}
                     alt="group"
                     className="w-full h-full object-cover rounded-lg"
                     loading="lazy"
                   />
                   <img
-                    src={member.logo}
+                    src={
+                      member.institution_logo
+                        ? `https://backend.comcin.com.ng/${member.institution_logo}`
+                        : memberImage
+                    }
                     alt="logo"
                     className="absolute -bottom-8 left-4 w-16 h-16 bg-white p-1 rounded-full border shadow-md z-10"
                   />
@@ -94,7 +91,7 @@ export default function MembersComponent() {
 
                 <div className="mt-4 pt-8 pb-20 px-4 text-left">
                   <h3 className="text-base font-semibold text-gray-800 leading-tight">
-                    {member.name}
+                    {member.institution_name}
                   </h3>
                 </div>
 
@@ -106,11 +103,17 @@ export default function MembersComponent() {
                   items-start px-4 text-right pointer-events-none"
                 >
                   <img
-                    src={member.logo}
+                    src={
+                      member.institution_logo
+                        ? `https://backend.comcin.com.ng/${member.institution_logo}`
+                        : memberImage
+                    }
                     alt="logo"
                     className="w-12 h-12 mb-2 bg-white p-1 rounded-full border shadow-md"
                   />
-                  <p className="text-sm font-semibold">{member.name}</p>
+                  <p className="text-sm font-semibold">
+                    {member.institution_name}
+                  </p>
                   <div className="space-y-1 w-full text-xs">
                     <div className="flex">
                       <span className="min-w-[90px] text-left">

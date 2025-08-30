@@ -16,8 +16,6 @@ export default function MyInstitution() {
   const { data: personalInfo , refetch} = useGetMemberDashboardQuery();
   const { data: edituser } = useGetMemberDashboardEditUserQuery();
 
-  console.log("edituser", edituser);
-
   if (isLoading) {
     return <Loader />;
   }
@@ -39,7 +37,7 @@ export default function MyInstitution() {
           <div className="flex flex-col">
             <InstitutionProfile personalInfo={personalInfo} refetch={refetch} />
             <InstitutionalInformation
-              institution={data}
+              institution={data?.institution}
               personalInfo={personalInfo}
             />
           </div>
@@ -47,7 +45,7 @@ export default function MyInstitution() {
           {/* Right Column: Key Contact + Uploaded Files */}
           <div className="flex flex-col gap-6">
             <KeyContactPerson />
-            <UploadedFiles files={data} />
+            <UploadedFiles files={data?.institution} />
           </div>
         </div>
       </div>
