@@ -1,12 +1,7 @@
 import CustomFileUpload from "@/Component/CustomFileUpload";
 import CustomInput from "@/Component/CustomInput";
-import {
-  useCreateContentMutation,
-  useUpdateContentMutation,
-} from "@/services/admin-dashboard/dashboard";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import { BsPatchCheck, BsBookmarkDash } from "react-icons/bs";
 import { FaRegTimesCircle } from "react-icons/fa";
 import { MdOutlineCancelPresentation } from "react-icons/md";
@@ -15,36 +10,13 @@ export default function CreateNewsModal({
   onClose,
   mode = "create",
   initialData,
-  refetch,
 }) {
-  const [createContent, { isLoading: createLoading }] =
-    useCreateContentMutation();
-  const [updateContent, { isLoading: updateLoading }] =
-    useUpdateContentMutation();
-  console.log(initialData);
   const {
     register,
     handleSubmit,
     reset,
-    watch,
     formState: { errors },
   } = useForm();
-
-  const [preview, setPreview] = useState(null);
-  // Watch the file input
-  const watchFile = watch("image");
-
-  // Update preview when file changes
-  useEffect(() => {
-    if (watchFile && watchFile.length > 0 && mode === "create") {
-      const file = watchFile[0];
-      const objectUrl = URL.createObjectURL(file);
-      setPreview(objectUrl);
-
-      // cleanup old objectURL to avoid memory leaks
-      return () => URL.revokeObjectURL(objectUrl);
-    }
-  }, [watchFile]);
 
   useEffect(() => {
     if (mode === "edit" && initialData) {
@@ -52,46 +24,12 @@ export default function CreateNewsModal({
     }
   }, [mode, initialData, reset]);
 
-  const onSubmit = async (data) => {
-    const file = typeof data.image == "string" ? data.image : data.image?.[0]; // File object
-
-    const formData = new FormData();
-    formData.append("status", data.status);
-    formData.append("content", data.content);
-    formData.append("category", data.category);
-    formData.append("summary", data.summary);
-    formData.append("title", data.title);
-    if (file) {
-      formData.append("image", file);
-    }
-
-    // 🔥 Properly inspect FormData
-    for (let [key, value] of formData.entries()) {
-      console.log(key, value);
-    }
-
+  const onSubmit = (data) => {
     if (mode === "edit") {
-      try {
-        console.log("Updated Data ✅");
-        await updateContent({ id: initialData?.id, formData }).unwrap();
-        toast.success("Content updated successfully");
-        refetch();
-      } catch (error) {
-        console.log(error);
-        toast.error(error?.data?.message || "Update failed");
-      }
+      console.log("Updated Data:", data);
     } else {
-      try {
-        const res = await createContent(formData);
-        console.log(res, "Create Content Response");
-        toast.success("Content created successfully");
-        refetch();
-      } catch (error) {
-        console.log(error);
-        toast.error(error?.data?.message || "Creation failed");
-      }
+      console.log("Created Data:", data);
     }
-
     onClose();
   };
 
@@ -124,67 +62,49 @@ export default function CreateNewsModal({
             errors={errors}
           />
 
-          {/* Status */}
+          {/* Category & Date */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium mb-1">Category</label>
               <select
-                {...register("category", { required: true })}
+                {...register("type", { required: true })}
                 className="w-full border border-gray-300 rounded-lg px-3 py-2"
               >
                 <option value="">Select type</option>
-                <option value="Upcoming">Upcoming</option>
-                <option value="Past Event">Past Event</option>
-                <option value="Update">Update</option>
-                <option value="Coming Soon">Coming Soon</option>
-                <option value="Watch Out">Watch Out</option>
+                <option value="Cooperative Society">Cooperative Society</option>
+                <option value="Microfinance Bank">Microfinance Bank</option>
               </select>
-              {errors.category && (
+              {errors.type && (
                 <span className="text-red-500 text-sm">
                   Category is required
                 </span>
               )}
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">Status</label>
-              <select
-                {...register("status", { required: true })}
+              <label className="block text-sm font-medium mb-1">Date</label>
+              <input
+                type="date"
+                {...register("date", { required: true })}
                 className="w-full border border-gray-300 rounded-lg px-3 py-2"
-              >
-                <option value="">Select type</option>
-                <option value="archived">Archived</option>
-                <option value="published">Published</option>
-                <option value="draft">Draft</option>
-              </select>
-              {errors.type && (
-                <span className="text-red-500 text-sm">Status is required</span>
+              />
+              {errors.date && (
+                <span className="text-red-500 text-sm">Date is required</span>
               )}
             </div>
           </div>
 
-          {/* Summary */}
-          <div>
-            <label className="block text-sm font-medium mb-1">Summary</label>
-            <textarea
-              {...register("summary", { required: true })}
-              rows={4}
-              placeholder="Enter content description"
-              className="w-full border border-gray-300 rounded-lg px-3 py-2"
-            />
-            {errors.content && (
-              <span className="text-red-500 text-sm">Summary is required</span>
-            )}
-          </div>
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium mb-1">Content</label>
+            <label className="block text-sm font-medium mb-1">
+              Description
+            </label>
             <textarea
-              {...register("content", { required: true })}
+              {...register("description", { required: true })}
               rows={4}
               placeholder="Enter content description"
               className="w-full border border-gray-300 rounded-lg px-3 py-2"
             />
-            {errors.content && (
+            {errors.description && (
               <span className="text-red-500 text-sm">
                 Description is required
               </span>
@@ -194,15 +114,10 @@ export default function CreateNewsModal({
           {/* File Upload */}
           <CustomFileUpload
             label="Upload Image/Poster *"
-            name="image"
+            name="posterImage"
             register={register}
             required={mode === "create"} // only required when creating
             errors={errors}
-            preview={
-              mode == "create"
-                ? preview
-                : `https://backend.comcin.com.ng/${initialData?.image}`
-            }
           />
 
           {/* Buttons */}
@@ -229,13 +144,7 @@ export default function CreateNewsModal({
               className="flex items-center gap-2 bg-[#0A8625] text-white px-6 py-2 rounded hover:bg-green-700"
             >
               <BsPatchCheck size={18} />
-              {mode === "edit"
-                ? updateLoading
-                  ? "Updating..."
-                  : "Update Content"
-                : createLoading
-                ? "Creating..."
-                : "Publish Content"}
+              {mode === "edit" ? "Update Content" : "Publish Content"}
             </button>
           </div>
         </form>

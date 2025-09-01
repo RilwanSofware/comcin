@@ -10,6 +10,9 @@ import Loader from "@/Component/Loader";
 export default function InstitutionManagemment() {
   const {data, isLoading} = useGetAdminInstitutionQuery();
 
+
+  console.log(data?.data?.members_list);
+
    if (isLoading) {
       return <Loader />;
     }

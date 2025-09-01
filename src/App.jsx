@@ -33,10 +33,10 @@ export default function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/news" element={<News />} />
-        <Route path="/news/:slug" element={<NewsDetail />} />
+        <Route path="/news/:id" element={<NewsDetail />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/members" element={<MembersDirectory />} />
+        <Route path="/news" element={<News />} />
         <Route path="/about" element={<About />} />
 
         {/* Guest-only routes */}

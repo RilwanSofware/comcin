@@ -1,19 +1,56 @@
 import React, { useState, useRef } from "react";
 import { FaChevronLeft, FaChevronRight, FaUser } from "react-icons/fa";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { HiArrowRight } from "react-icons/hi";
-import { useGetSingleNewsQuery } from "@/services/admin-dashboard/dashboard";
-import { useGetMembersQuery } from "@/services/membersApi";
 const slugify = (text) =>
   text
     .toLowerCase()
     .replace(/ /g, "-")
     .replace(/[^\w-]+/g, "");
 
+const relatedNews = [
+  {
+    id: 1,
+    type: "Up Coming Event",
+    typeColor: "bg-[#0A8625]",
+    title: "Strengthening Microfinance Collaboration in Nigeria",
+    description:
+      "Stay updated with the latest developments in the Nigerian microfinance sector and COMCIN activities.",
+    author: "Author Name",
+    date: "28 Jun 2025",
+    readTime: "7 min read",
+    image:
+      "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=1226&q=80",
+  },
+  {
+    id: 2,
+    type: "Past Event",
+    typeColor: "bg-[#1E6C29]",
+    title: "News & Announcements",
+    description:
+      "Stay updated with the latest developments in the Nigerian microfinance sector and COMCIN activities.",
+    author: "Author Name",
+    date: "28 Jun 2025",
+    readTime: "7 min read",
+    image:
+      "https://images.unsplash.com/photo-1556740749-887f6717d7e4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1226&q=80",
+  },
+  {
+    id: 3,
+    type: "Update",
+    typeColor: "bg-[#1E6C29]",
+    title: "News & Announcements",
+    description:
+      "Stay updated with the latest developments in the Nigerian microfinance sector and COMCIN activities.",
+    author: "Author Name",
+    date: "28 Jun 2025",
+    readTime: "7 min read",
+    image:
+      "https://images.unsplash.com/photo-1614280287546-ef3cfb867f6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1226&q=80",
+  },
+];
 
 export default function NewsDetailComponent() {
-  const { data, isLoading, error } = useGetMembersQuery();
-  const { slug } = useParams();
   const scrollContainerRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -41,32 +78,29 @@ export default function NewsDetailComponent() {
     const newIndex = currentIndex < newsItems.length - 1 ? currentIndex + 1 : 0;
     scrollToIndex(newIndex);
   };
-  const newsItem = data?.news?.find((item) => slug === slugify(item.title));
-  const relatedNewsItem = data?.news?.filter(
-    (item) => slug !== slugify(item.title)
-  );
-  //   const newsItem = {
-  //     type: "Up Coming Event",
-  //     typeColor: "bg-[#0A8625]",
-  //     title: "Strengthening Microfinance Collaboration in Nigeria",
-  //     author: "Author Name",
-  //     date: "28 Jun 2025",
-  //     readTime: "7 min read",
-  //     image:
-  //       "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=1226&q=80",
-  //     body: `The Coalition of Microlending and Cooperative Institutions in Nigeria (COMCIN) held a strategic forum aimed at enhancing collaboration and compliance across grassroots financial institutions. The event, which took place at the COMCIN Secretariat in Abuja, brought together over 100 delegates from across Nigeria.
 
-  // Speakers emphasized the importance of ethical lending practices, transparency, and digital adoption. The forum also highlighted upcoming regulatory changes and provided members with resources for aligning operations to new standards.
+  const newsItem = {
+    type: "Up Coming Event",
+    typeColor: "bg-[#0A8625]",
+    title: "Strengthening Microfinance Collaboration in Nigeria",
+    author: "Author Name",
+    date: "28 Jun 2025",
+    readTime: "7 min read",
+    image:
+      "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=1226&q=80",
+    body: `The Coalition of Microlending and Cooperative Institutions in Nigeria (COMCIN) held a strategic forum aimed at enhancing collaboration and compliance across grassroots financial institutions. The event, which took place at the COMCIN Secretariat in Abuja, brought together over 100 delegates from across Nigeria.
 
-  // “COMCIN is committed to building a strong and unified voice for the microlending sector in Nigeria,” said Mrs. Ngozi Adeyemi, the Executive Chair.
+Speakers emphasized the importance of ethical lending practices, transparency, and digital adoption. The forum also highlighted upcoming regulatory changes and provided members with resources for aligning operations to new standards.
 
-  // Key Takeaways:
-  // • Unified compliance reporting for member institutions
-  // • Introduction of the COMCIN Digital Membership Portal
-  // • Partnership opportunities with fintech providers
+“COMCIN is committed to building a strong and unified voice for the microlending sector in Nigeria,” said Mrs. Ngozi Adeyemi, the Executive Chair.
 
-  // Members are encouraged to log into their dashboards to download event materials and access training resources. COMCIN remains focused on empowering institutions with tools to drive financial inclusion at scale.`,
-  //   };
+Key Takeaways:
+• Unified compliance reporting for member institutions
+• Introduction of the COMCIN Digital Membership Portal
+• Partnership opportunities with fintech providers
+
+Members are encouraged to log into their dashboards to download event materials and access training resources. COMCIN remains focused on empowering institutions with tools to drive financial inclusion at scale.`,
+  };
 
   return (
     <section className="py-16 text-white">
@@ -85,10 +119,9 @@ export default function NewsDetailComponent() {
               <FaUser className="w-8 h-8 text-gray-500" />
             </div>
             <div className="flex flex-col space-x-3 text-sm text-[#1E1E1E]">
-              {newsItem.author || "Admin COMCIN"}
+              {newsItem.author}
               <div className="flex items-center space-x-1">
-                <span>{new Date(newsItem.created_at).toDateString()}</span> .
-                <span>{newsItem.readTime || "5 min read"}</span>
+                <span>{newsItem.date}</span> .<span>{newsItem.readTime}</span>
               </div>
             </div>
           </div>
@@ -102,11 +135,7 @@ export default function NewsDetailComponent() {
         {/* Image */}
         <div className="rounded-2xl overflow-hidden mb-8">
           <img
-            src={
-              newsItem.image
-                ? `https://backend.comcin.com.ng/${newsItem.image}`
-                : "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=1226&q=80"
-            }
+            src={newsItem.image}
             alt={newsItem.title}
             className="w-full h-auto object-cover"
           />
@@ -114,7 +143,7 @@ export default function NewsDetailComponent() {
 
         {/* Body */}
         <div className="space-y-4 text-[#686868] text-base leading-relaxed">
-          {newsItem?.content.split("\n").map((para, i) => (
+          {newsItem.body.split("\n").map((para, i) => (
             <p key={i}>
               {para.startsWith("•") ? (
                 <span className="ml-4">• {para.slice(1).trim()}</span>
@@ -126,11 +155,11 @@ export default function NewsDetailComponent() {
         </div>
 
         {/* CTA Button */}
-        {/* <div className="mt-10">
+        <div className="mt-10">
           <button className="flex items-center gap-2 bg-[#0A8625] text-white font-medium px-6 py-3 rounded-md hover:bg-green-700 transition">
             Register for Event <HiArrowRight className="text-xl" />
           </button>
-        </div> */}
+        </div>
       </div>
       <div className="container mx-auto px-4 max-w-5xl mt-20">
         <div className="flex justify-between items-center mb-8">
@@ -164,19 +193,15 @@ export default function NewsDetailComponent() {
             className="flex overflow-x-auto scrollbar-hide space-x-4 pb-4 snap-x snap-mandatory"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
-            {relatedNewsItem.map((item) => (
+            {relatedNews.map((item) => (
               <div
                 key={item.id}
-                className="flex-shrink-0 w-full md:w-[400px] snap-start"
+                className="flex-shrink-0 w-full md:w-[350px] snap-start"
               >
                 <div className="bg-white pb-5 rounded-2xl shadow-md overflow-hidden transition-shadow duration-300 group h-full">
                   <div className="h-48 p-2 overflow-hidden">
                     <img
-                      src={
-                        item.image
-                          ? `https://backend.comcin.com.ng/${item.image}`
-                          : "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=1226&q=80"
-                      }
+                      src={item.image}
                       alt={item.title}
                       className="w-full h-full rounded-2xl object-cover group-hover:scale-105 transition-transform duration-300"
                     />
@@ -184,11 +209,9 @@ export default function NewsDetailComponent() {
 
                   <div className="px-2 mt-4 pr-6">
                     <span
-                      className={`${
-                        item.typeColor || "bg-green-600"
-                      } text-white px-3 py-1 my-3 rounded-md text-sm font-medium`}
+                      className={`${item.typeColor} text-white px-3 py-1 my-3 rounded-md text-sm font-medium`}
                     >
-                      {item.category}
+                      {item.type}
                     </span>
                     <Link to={`/news/${slugify(item.title)}`}>
                       <h3 className="text-xl font-bold text-gray-900 my-3 line-clamp-2 group-hover:text-green-600 transition-colors duration-200">
@@ -196,7 +219,7 @@ export default function NewsDetailComponent() {
                       </h3>
                     </Link>
                     <p className="text-gray-600 mb-4 line-clamp-3 leading-relaxed">
-                      {item.summary}
+                      {item.description}
                     </p>
 
                     <div className="flex items-center justify-between pt-4 border-gray-100">
@@ -205,12 +228,10 @@ export default function NewsDetailComponent() {
                           <FaUser className="w-8 h-8 text-gray-500" />
                         </div>
                         <div className="flex flex-col space-x-3 text-sm text-[#1E1E1E]">
-                          {item.author || "Admin COMCIN"}
+                          {item.author}
                           <div className="flex items-center space-x-1">
-                            <span>
-                              {new Date(item.created_at)?.toDateString()}
-                            </span>{" "}
-                            .<span>{item.readTime || "5 min read"}</span>
+                            <span>{item.date}</span> .
+                            <span>{item.readTime}</span>
                           </div>
                         </div>
                       </div>
