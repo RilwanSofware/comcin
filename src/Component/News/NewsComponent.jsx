@@ -3,6 +3,7 @@ import { IoFilter } from "react-icons/io5";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaUser } from "react-icons/fa";
+import { useGetSingleNewsQuery } from "@/services/admin-dashboard/dashboard";
 
 const slugify = (text) =>
   text
@@ -11,7 +12,8 @@ const slugify = (text) =>
     .replace(/[^\w-]+/g, "");
 
 export default function NewsComponent() {
-  const { data: members, isLoading } = useGetMembersQuery();
+  const { data, isLoading, error } = useGetMembersQuery();
+  console.log(data);
 
   const mockMembers = Array(15).fill({
     type: "Up Coming Event",
@@ -26,10 +28,10 @@ export default function NewsComponent() {
     typeColor: "bg-green-600",
   });
 
-  const displayNews = members || mockMembers;
+  const displayNews = data?.news || mockMembers;
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const newsPerPage = 24;
+  const newsPerPage = 10;
 
   const filteredNews = displayNews.filter((item) =>
     item.title.toLowerCase().includes(searchTerm.toLowerCase())
@@ -58,7 +60,7 @@ export default function NewsComponent() {
         <div className="bg-white px-4 py-3 rounded-lg flex flex-col md:flex-row justify-between items-center gap-4">
           {/* Total Members */}
           <div className="text-base text-[#0A8625] font-semibold">
-            {filteredNews.length} Members
+            {filteredNews.length} News and Annoucement
           </div>
 
           {/* Search + Filter */}
@@ -89,13 +91,17 @@ export default function NewsComponent() {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
             {paginatedNews.map((item, idx) => (
               <div
-                key={idx}
+                key={item.id}
                 className="flex-shrink-0 w-full md:w-[400px] snap-start"
               >
                 <div className="bg-white pb-5 rounded-2xl shadow-md overflow-hidden transition-shadow duration-300 group h-full">
                   <div className="h-48 p-2 overflow-hidden">
                     <img
-                      src={item.image}
+                      src={
+                        item.image
+                          ? `https://backend.comcin.com.ng/${item.image}`
+                          : "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=1226&q=80"
+                      }
                       alt={item.title}
                       className="w-full h-full rounded-2xl object-cover group-hover:scale-105 transition-transform duration-300"
                     />
@@ -103,9 +109,11 @@ export default function NewsComponent() {
 
                   <div className="px-2 mt-4 pr-6">
                     <span
-                      className={`${item.typeColor} text-white px-3 py-1 my-3 rounded-md text-sm font-medium`}
+                      className={`${
+                        item.typeColor || "bg-green-600"
+                      } text-white px-3 py-1 my-3 rounded-md text-sm font-medium`}
                     >
-                      {item.type}
+                      {item.category}
                     </span>
                     <Link to={`/news/${slugify(item.title)}`}>
                       <h3 className="text-xl font-bold text-gray-900 my-3 line-clamp-2 group-hover:text-green-600 transition-colors duration-200">
@@ -113,7 +121,7 @@ export default function NewsComponent() {
                       </h3>
                     </Link>
                     <p className="text-gray-600 mb-4 line-clamp-3 leading-relaxed">
-                      {item.description}
+                      {item.summary}
                     </p>
 
                     <div className="flex items-center justify-between pt-4 border-gray-100">
@@ -122,10 +130,12 @@ export default function NewsComponent() {
                           <FaUser className="w-8 h-8 text-gray-500" />
                         </div>
                         <div className="flex flex-col space-x-3 text-sm text-[#1E1E1E]">
-                          {item.author}
+                          {item.author || "Admin COMCIN"}
                           <div className="flex items-center space-x-1">
-                            <span>{item.date}</span> .
-                            <span>{item.readTime}</span>
+                            <span>
+                              {new Date(item.created_at)?.toDateString()}
+                            </span>{" "}
+                            .<span>{item.readTime || "5 min read"}</span>
                           </div>
                         </div>
                       </div>

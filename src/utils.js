@@ -13,3 +13,10 @@ export const statusStyles = {
   approved: "bg-[#DCFCE7] text-[#166534]",
   rejected: "bg-[#FEE2E2] text-[#991B1B]",
 };
+
+export const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth", // "auto" if you don’t want animation
+  });
+};

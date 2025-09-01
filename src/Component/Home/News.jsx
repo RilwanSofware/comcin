@@ -1,3 +1,4 @@
+import { useGetMembersQuery } from "@/services/membersApi";
 import React, { useState, useRef } from "react";
 import { FaChevronLeft, FaChevronRight, FaUser } from "react-icons/fa";
 import { Link } from "react-router-dom";
@@ -9,63 +10,10 @@ const slugify = (text) =>
     .replace(/[^\w-]+/g, "");
 
 export default function News() {
+  const { data, isLoading, error } = useGetMembersQuery();
+  console.log(data);
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollContainerRef = useRef(null);
-
-  const newsItems = [
-    {
-      id: 1,
-      type: "Up Coming Event",
-      title: "Strengthening Microfinance Institutions in Nigeria",
-      description:
-        "Stay updated with the latest developments in the Nigerian microfinance sector and COMCIN activities.",
-      author: "Author Name",
-      date: "28 Jun 2025",
-      readTime: "7 min read",
-      image:
-        "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=1226&q=80",
-      typeColor: "bg-green-600",
-    },
-    {
-      id: 2,
-      type: "Past Event",
-      title: "COMCIN Annual Conference 2025",
-      description:
-        "Stay updated with the latest developments in the Nigerian microfinance sector and COMCIN activities.",
-      author: "Author Name",
-      date: "28 Jun 2025",
-      readTime: "7 min read",
-      image:
-        "https://images.unsplash.com/photo-1591115765373-5207764f72e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
-      typeColor: "bg-green-600",
-    },
-    {
-      id: 3,
-      type: "Update",
-      title: "New Regulatory Guidelines for Microfinance Banks",
-      description:
-        "Stay updated with the latest developments in the Nigerian microfinance sector and COMCIN activities.",
-      author: "Author Name",
-      date: "28 Jun 2025",
-      readTime: "7 min read",
-      image:
-        "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1171&q=80",
-      typeColor: "bg-green-600",
-    },
-    {
-      id: 4,
-      type: "Update",
-      title: "Digital Innovation in Microfinance",
-      description:
-        "Stay updated with the latest developments in the Nigerian microfinance sector and COMCIN activities.",
-      author: "Author Name",
-      date: "15 Jun 2025",
-      readTime: "5 min read",
-      image:
-        "https://images.unsplash.com/photo-1556761175-b413da4baf72?ixlib=rb-4.0.3&auto=format&fit=crop&w=1074&q=80",
-      typeColor: "bg-green-600",
-    },
-  ];
 
   const scrollToIndex = (index) => {
     if (scrollContainerRef.current) {
@@ -83,12 +31,14 @@ export default function News() {
   };
 
   const scrollLeft = () => {
-    const newIndex = currentIndex > 0 ? currentIndex - 1 : newsItems.length - 1;
+    const newIndex =
+      currentIndex > 0 ? currentIndex - 1 : data?.news.length - 1;
     scrollToIndex(newIndex);
   };
 
   const scrollRight = () => {
-    const newIndex = currentIndex < newsItems.length - 1 ? currentIndex + 1 : 0;
+    const newIndex =
+      currentIndex < data?.news.length - 1 ? currentIndex + 1 : 0;
     scrollToIndex(newIndex);
   };
 
@@ -130,7 +80,7 @@ export default function News() {
             className="flex overflow-x-auto scrollbar-hide space-x-4 pb-4 snap-x snap-mandatory"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
-            {newsItems.map((item) => (
+            {data?.news?.map((item) => (
               <div
                 key={item.id}
                 className="flex-shrink-0 w-full md:w-[400px] snap-start"
@@ -138,7 +88,11 @@ export default function News() {
                 <div className="bg-white pb-5 rounded-2xl shadow-md overflow-hidden transition-shadow duration-300 group h-full">
                   <div className="h-48 p-2 overflow-hidden">
                     <img
-                      src={item.image}
+                      src={
+                        item.image
+                          ? `https://backend.comcin.com.ng/${item.image}`
+                          : "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=1226&q=80"
+                      }
                       alt={item.title}
                       className="w-full h-full rounded-2xl object-cover group-hover:scale-105 transition-transform duration-300"
                     />
@@ -146,9 +100,11 @@ export default function News() {
 
                   <div className="px-2 mt-4 pr-6">
                     <span
-                      className={`${item.typeColor} text-white px-3 py-1 my-3 rounded-md text-sm font-medium`}
+                      className={`${
+                        item.typeColor || "bg-green-600"
+                      } text-white px-3 py-1 my-3 rounded-md text-sm font-medium`}
                     >
-                      {item.type}
+                      {item.category}
                     </span>
                     <Link to={`/news/${slugify(item.title)}`}>
                       <h3 className="text-xl font-bold text-gray-900 my-3 line-clamp-2 group-hover:text-green-600 transition-colors duration-200">
@@ -156,7 +112,7 @@ export default function News() {
                       </h3>
                     </Link>
                     <p className="text-gray-600 mb-4 line-clamp-3 leading-relaxed">
-                      {item.description}
+                      {item.summary}
                     </p>
 
                     <div className="flex items-center justify-between pt-4 border-gray-100">
@@ -165,10 +121,12 @@ export default function News() {
                           <FaUser className="w-8 h-8 text-gray-500" />
                         </div>
                         <div className="flex flex-col space-x-3 text-sm text-[#1E1E1E]">
-                          {item.author}
+                          {item.author || "Admin COMCIN"}
                           <div className="flex items-center space-x-1">
-                            <span>{item.date}</span> .
-                            <span>{item.readTime}</span>
+                            <span>
+                              {new Date(item.created_at)?.toDateString()}
+                            </span>{" "}
+                            .<span>{item.readTime || "5 min read"}</span>
                           </div>
                         </div>
                       </div>
@@ -180,9 +138,12 @@ export default function News() {
           </div>
         </div>
         <div className="w-full md:w-auto flex justify-end">
-          <button className="bg-green-700 text-white px-6 py-2 rounded-md font-semibold transition-colors">
+          <Link
+            to={"/news"}
+            className="bg-green-700 text-white px-6 py-2 rounded-md font-semibold transition-colors"
+          >
             View All News{" "}
-          </button>
+          </Link>
         </div>
       </div>
     </section>
