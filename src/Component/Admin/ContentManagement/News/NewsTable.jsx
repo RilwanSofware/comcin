@@ -3,63 +3,25 @@ import { HiOutlineEye } from "react-icons/hi";
 import { useState } from "react";
 import { FiEdit2, FiPlusCircle, FiTrash2 } from "react-icons/fi";
 import CreateNewsModal from "./CreateNewsModal";
+import {
+  useCreateContentMutation,
+  useDeleteContentMutation,
+  useGetContentQuery,
+} from "@/services/admin-dashboard/dashboard";
+import toast from "react-hot-toast";
 
 export default function NewsTable() {
-  const allPayments = [
-    {
-      institutionName: "Lagos State Cooperative Federation",
-      type: "Cooperative Society",
-      recordId: "ID:TXN-2024-001",
-      paymentType: "Annual Levy",
-      method: "Bank Transfer",
-      status: "Paid",
-      amount: "450",
-      category: "state",
-      date: "1/31/2024",
-    },
-    {
-      institutionName: "First City Microfinance Bank",
-      type: "Microfinance Bank",
-      recordId: "ID:TXN-2024-001",
-      paymentType: "Annual Levy",
-      method: "Bank Transfer",
-      status: "Pending",
-      amount: "450",
-      category: "state",
-      date: "2/01/2024",
-    },
-    {
-      institutionName: "Abuja Municipal Thrift Society",
-      paymentType: "Annual Levy",
-      method: "Bank Transfer",
-      type: "Cooperative Society",
-      recordId: "ID:TXN-2024-001",
-      status: "Overdue",
-      amount: "450",
-      category: "state",
-      date: "2/02/2024",
-    },
-    {
-      institutionName: "Kano Farmers Cooperative Union",
-      paymentType: "Annual Levy",
-      method: "Bank Transfer",
-      type: "Cooperative Society",
-      recordId: "ID:TXN-2024-001",
-      status: "Failed",
-      amount: "450",
-      category: "state",
-      date: "2/03/2024",
-    },
-  ];
+  const { data, refetch } = useGetContentQuery();
+  const [deleteContent] = useDeleteContentMutation();
 
   const [showModal, setShowModal] = useState(false);
   const [mode, setMode] = useState("create"); // "create" or "edit"
   const [selectedNews, setSelectedNews] = useState(null);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3;
+  const itemsPerPage = 10;
 
-  const filteredPayments = allPayments;
+  const filteredPayments = data || [];
 
   const totalPages = Math.ceil(filteredPayments.length / itemsPerPage);
   const paginatedData = filteredPayments.slice(
@@ -85,9 +47,15 @@ export default function NewsTable() {
     setShowModal(true);
   };
 
-  const handleDelete = (item) => {
+  const handleDelete = async (item) => {
     if (confirm(`Are you sure you want to delete "${item.title}"?`)) {
-      console.log("Deleted:", item);
+      try {
+        const res = await deleteContent(item.id);
+        toast.success("News deleted successfully");
+        console.log(res, "Delete Response");
+      } catch (error) {
+        console.error("Delete failed:", error);
+      }
     }
   };
 
@@ -104,7 +72,7 @@ export default function NewsTable() {
           className="flex items-center gap-2 bg-[#0A8625] text-white px-4 py-2 rounded text-sm"
         >
           <FiPlusCircle />
-          Create Invoice
+          Create News
         </button>
       </div>
 
@@ -163,20 +131,22 @@ export default function NewsTable() {
               <tr key={index} className="border-b last:border-none">
                 <td className="px-4 py-3">
                   <span className="font-medium text-gray-800">
-                    {item.institutionName}
+                    {item.title}
                   </span>
                 </td>
                 <td className="flex flex-col px-4 py-3">
                   <span className="font-medium text-gray-800">
-                    {item.paymentType}
+                    {item.category}
                   </span>
                 </td>
                 <td className="px-4 py-3">{item.status}</td>
-                <td className="px-4 py-3">{item.date}</td>
+                <td className="px-4 py-3">
+                  {new Date(item.created_at).toDateString()}
+                </td>
                 <td className="px-4 py-3 flex justify-start gap-3">
-                  <button className="text-[#0A8625] text-sm">
+                  {/* <button className="text-[#0A8625] text-sm">
                     <HiOutlineEye className="text-xl" />
-                  </button>
+                  </button> */}
                   <button
                     onClick={() => handleEdit(item)}
                     className="text-blue-600 hover:scale-110"
@@ -239,6 +209,7 @@ export default function NewsTable() {
           onClose={() => setShowModal(false)}
           mode={mode}
           initialData={selectedNews}
+          refetch={refetch}
         />
       )}
     </div>

@@ -7,6 +7,7 @@ import {
 import { HiOutlineEye } from "react-icons/hi";
 import { MdCancel } from "react-icons/md";
 import { useState } from "react";
+import ViewIntituition from "./ViewIntituition";
 
 export default function InstitutionTable({ membersList }) {
   const [searchTerm, setSearchTerm] = useState("");
@@ -14,8 +15,15 @@ export default function InstitutionTable({ membersList }) {
   const [categoryFilter, setCategoryFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3;
+  const itemsPerPage = 10;
 
+  const [selectedInstituition, setSelectedInstituition] = useState(null);
+  const [showModal, setShowModal] = useState(null);
+
+  const handleView = (item) => {
+    setSelectedInstituition(item);
+    setShowModal(true);
+  };
   // Filter logic
   const filteredPayments = membersList.filter((p) => {
     const searchMatch =
@@ -163,7 +171,10 @@ export default function InstitutionTable({ membersList }) {
                 </td>
                 <td className="px-4 py-3">{item.status}</td>
                 <td className="px-4 py-3 text-center">
-                  <button className="text-[#0A8625] text-sm">
+                  <button
+                    onClick={() => handleView(item)}
+                    className="text-[#0A8625] text-sm"
+                  >
                     <HiOutlineEye className="text-xl" />
                   </button>
                 </td>
@@ -218,6 +229,13 @@ export default function InstitutionTable({ membersList }) {
           </button>
         </div>
       </div>
+
+      {showModal && (
+        <ViewIntituition
+          initialData={selectedInstituition}
+          onClose={() => setShowModal(false)}
+        />
+      )}
     </div>
   );
 }

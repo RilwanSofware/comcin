@@ -63,12 +63,31 @@ export const adminDashboardApi = createApi({
     getAdminContent: builder.query({
       query: () => "/admin/website-content",
     }),
-    CreateContent: builder.mutation({
+    createContent: builder.mutation({
       query: (data) => ({
-        url: `/admin/website-content`,
+        url: `/admin/news`,
         method: "POST",
         body: data,
       }),
+    }),
+    updateContent: builder.mutation({
+      query: ({ id, formData }) => ({
+        url: `/admin/news/${id}`,
+        method: "PUT", // or PATCH depending on your backend
+        body: formData,
+      }),
+    }),
+    deleteContent: builder.mutation({
+      query: (id) => ({
+        url: `/admin/news/${id}`,
+        method: "DELETE",
+      }),
+    }),
+    getContent: builder.query({
+      query: () => "/admin/news",
+    }),
+    getSingleNews: builder.query({
+      query: (id) => `/admin/news/${id}`,
     }),
 
     getAdminTestimonial: builder.query({
@@ -150,6 +169,9 @@ export const {
   useApproveRequestMutation,
   useApproveRequestSuportMutation,
   useGetAdminSupportQuery,
+  useGetContentQuery,
+  useDeleteContentMutation,
+  useUpdateContentMutation,
   useGetAdminTestimonialQuery,
   useGetAdminUserQuery,
   useCreateAdminMutation,
@@ -164,5 +186,6 @@ export const {
   useUpdateSettingAccountMutation,
   useGetAdminContentQuery,
   useCreateContentMutation,
-  useGetAdminNotificationQuery
+  useGetAdminNotificationQuery,
+  useGetSingleNewsQuery,
 } = adminDashboardApi;
