@@ -11,7 +11,6 @@ const slugify = (text) =>
 
 export default function News() {
   const { data, isLoading, error } = useGetMembersQuery();
-  console.log(data);
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollContainerRef = useRef(null);
 

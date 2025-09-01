@@ -10,53 +10,10 @@ const slugify = (text) =>
     .replace(/ /g, "-")
     .replace(/[^\w-]+/g, "");
 
-const relatedNews = [
-  {
-    id: 1,
-    type: "Up Coming Event",
-    typeColor: "bg-[#0A8625]",
-    title: "Strengthening Microfinance Collaboration in Nigeria",
-    description:
-      "Stay updated with the latest developments in the Nigerian microfinance sector and COMCIN activities.",
-    author: "Author Name",
-    date: "28 Jun 2025",
-    readTime: "7 min read",
-    image:
-      "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=1226&q=80",
-  },
-  {
-    id: 2,
-    type: "Past Event",
-    typeColor: "bg-[#1E6C29]",
-    title: "News & Announcements",
-    description:
-      "Stay updated with the latest developments in the Nigerian microfinance sector and COMCIN activities.",
-    author: "Author Name",
-    date: "28 Jun 2025",
-    readTime: "7 min read",
-    image:
-      "https://images.unsplash.com/photo-1556740749-887f6717d7e4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1226&q=80",
-  },
-  {
-    id: 3,
-    type: "Update",
-    typeColor: "bg-[#1E6C29]",
-    title: "News & Announcements",
-    description:
-      "Stay updated with the latest developments in the Nigerian microfinance sector and COMCIN activities.",
-    author: "Author Name",
-    date: "28 Jun 2025",
-    readTime: "7 min read",
-    image:
-      "https://images.unsplash.com/photo-1614280287546-ef3cfb867f6e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1226&q=80",
-  },
-];
 
 export default function NewsDetailComponent() {
   const { data, isLoading, error } = useGetMembersQuery();
   const { slug } = useParams();
-  console.log(slug); //
-  console.log(data);
   const scrollContainerRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 

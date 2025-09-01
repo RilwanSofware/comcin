@@ -13,7 +13,6 @@ const slugify = (text) =>
 
 export default function NewsComponent() {
   const { data, isLoading, error } = useGetMembersQuery();
-  console.log(data);
 
   const mockMembers = Array(15).fill({
     type: "Up Coming Event",
