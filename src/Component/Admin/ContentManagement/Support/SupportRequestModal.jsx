@@ -135,7 +135,7 @@ export default function SupportRequestModal({
 
           {/* Buttons */}
           <div className="flex justify-end gap-4 pt-4">
-            {/* {mode === "edit" && (
+            {mode === "edit" && (
               <button
                 type="button"
                 onClick={onClose}
@@ -144,7 +144,7 @@ export default function SupportRequestModal({
                 <FaRegTimesCircle size={18} />
                 Delete Support
               </button>
-            )} */}
+            )}
             <button
               type="button"
               onClick={onClose}
