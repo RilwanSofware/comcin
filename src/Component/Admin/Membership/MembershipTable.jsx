@@ -201,7 +201,7 @@ export default function MembershipTable({ data, refetch }) {
               </td>
               <td className={`px-4 py-3`}>
                 <span
-                  className={`p-1 px-4 rounded ${ 
+                  className={`p-1 px-4 rounded ${
                     statusStyles[item.status?.toLowerCase()] || ""
                   } `}
                 >
@@ -266,6 +266,7 @@ export default function MembershipTable({ data, refetch }) {
           onClose={() => setShowModal(false)}
           initialData={selectedApplication}
           refetch={refetch}
+          canUpdate={activeTab == "pending"}
         />
       )}
     </div>

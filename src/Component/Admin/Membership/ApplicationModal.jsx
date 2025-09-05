@@ -11,12 +11,14 @@ import {
 import RejectForm from "./RejectForm";
 import toast from "react-hot-toast";
 
-export default function ApplicationModal({ onClose, initialData, refetch }) {
+export default function ApplicationModal({
+  onClose,
+  initialData,
+  refetch,
+  canUpdate,
+}) {
   const [showRejectForm, setShowRejectForm] = useState(false);
   const [approveRequest, { isLoading }] = useApproveRequestMutation();
-
-
-
 
   const {
     register,
@@ -378,25 +380,27 @@ export default function ApplicationModal({ onClose, initialData, refetch }) {
           </div>
 
           {/* Buttons */}
-          <div className="flex justify-end gap-4 pt-4">
-            <button
-              type="button"
-              onClick={handleReject}
-              className="flex items-center gap-2 px-4 py-2 rounded bg-[#B20B0B] text-white"
-            >
-              <FaRegTimesCircle size={18} />
-              Reject Request{" "}
-            </button>
+          {canUpdate && (
+            <div className="flex justify-end gap-4 pt-4">
+              <button
+                type="button"
+                onClick={handleReject}
+                className="flex items-center gap-2 px-4 py-2 rounded bg-[#B20B0B] text-white"
+              >
+                <FaRegTimesCircle size={18} />
+                Reject Request{" "}
+              </button>
 
-            <button
-              type="button"
-              onClick={handleApprove}
-              className="flex items-center gap-2 bg-[#0A8625] text-white px-6 py-2 rounded hover:bg-green-700"
-            >
-              <BsPatchCheck size={18} />
-              {isLoading ? "Approving..." : "Approve Member"}
-            </button>
-          </div>
+              <button
+                type="button"
+                onClick={handleApprove}
+                className="flex items-center gap-2 bg-[#0A8625] text-white px-6 py-2 rounded hover:bg-green-700"
+              >
+                <BsPatchCheck size={18} />
+                {isLoading ? "Approving..." : "Approve Member"}
+              </button>
+            </div>
+          )}
         </form>
       </div>
 

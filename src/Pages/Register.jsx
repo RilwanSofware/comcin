@@ -39,6 +39,7 @@ export default function Register() {
   const {
     register,
     handleSubmit,
+    getFieldState,
     watch,
     formState: { errors },
   } = useForm();
@@ -133,7 +134,9 @@ export default function Register() {
         <div className="w-full md:w-1/2 bg-white rounded-xl p-10 flex  min-h-[750px] shadow-lg">
           <div className="w-full">
             <div className="flex justify-between mb-6 text-center">
-              <img src={logo} alt="COMCIN Logo" className="h-10 mb-4" />
+              <Link to={"/"}>
+                <img src={logo} alt="COMCIN Logo" className="h-10 mb-4" />
+              </Link>
 
               <p className="flex gap-3 text-base font-normal text-[#1E1E1E]">
                 Already a Member?{" "}
@@ -228,22 +231,22 @@ export default function Register() {
                 </StepFormLayout>
               </form>
             ) : (
-              <div className="w-full lg:w-2/3 border border-[#E9EEEA] rounded-md p-6  space-y-4">
+              <div className="w-full lg:w-full border border-[#E9EEEA] rounded-md p-6  space-y-4">
                 <img src={success} alt="COMCIN Logo" className="h-20 mb-2" />
                 <h2 className="text-xl font-maven font-semibold text-[#1E1E1E]">
                   Registration Completed!{" "}
                 </h2>
                 <p className="text-sm text-[#686868]">
-                  We have sent email to galynaurdya@belugateam.info to confirm
-                  the validity of your email address. After receiving the email
-                  follow the link provided to proceed.
+                  We have sent an email to confirm the validity of your email
+                  address. After receiving the email follow the link provided to
+                  proceed.
                 </p>
                 <hr className="bg-[#E9EEEA]" />
                 <p className="text-sm text-[#686868]">
                   Click on resend email if you do not get an email!
                 </p>
 
-                <div className="flex justify-around mt-2">
+                <div className="flex justify-around gap-x-2 mt-2">
                   <button
                     onClick={() => setShowConfirmation(false)}
                     className="text-[#0A8625] rounded px-4 py-2 border border-[#0A8625] text-sm font-semibold"

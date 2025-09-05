@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import logo from "../assets/logo.png";
 
 import { MdOutlineDashboard } from "react-icons/md";
@@ -22,11 +22,13 @@ export default function AdminSidebar() {
   return (
     <aside className="w-64 bg-white border-r h-full">
       <div className="flex items-center gap-3 p-5 border-b mb-4">
-        <img
-          src={logo}
-          alt="COMCIN Logo"
-          className="w-12 h-12 object-contain"
-        />
+        <Link to="/">
+          <img
+            src={logo}
+            alt="COMCIN Logo"
+            className="w-12 h-12 object-contain"
+          />
+        </Link>
         <div>
           <div className="text-xl font-bold text-[#1E1E1E]">COMCIN</div>
           <div className="text-sm text-[#686868]">Admin Panel</div>
@@ -46,9 +48,9 @@ export default function AdminSidebar() {
           <RiMoneyDollarCircleLine className="inline mr-2" /> Financials &
           Levies
         </NavLink>
-        <NavLink to="/admin-dashboard/reports" className={getNavLinkClass}>
+        {/* <NavLink to="/admin-dashboard/reports" className={getNavLinkClass}>
           <SiSimpleanalytics className="inline mr-2" /> Reports & Analytics
-        </NavLink>
+        </NavLink> */}
         <NavLink to="/admin-dashboard/content" className={getNavLinkClass}>
           <LuNotebookPen className="inline mr-2" /> Content Management
         </NavLink>

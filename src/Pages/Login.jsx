@@ -97,8 +97,9 @@ export default function Login() {
             {slides.map((_, index) => (
               <span
                 key={index}
-                className={`w-2 h-2 rounded-full ${currentSlide === index ? "bg-white" : "bg-white/50"
-                  }`}
+                className={`w-2 h-2 rounded-full ${
+                  currentSlide === index ? "bg-white" : "bg-white/50"
+                }`}
               ></span>
             ))}
           </div>
@@ -108,7 +109,9 @@ export default function Login() {
         <div className="w-full md:w-1/2 bg-white rounded-xl p-10 flex  min-h-[750px] shadow-lg">
           <div className="w-full">
             <div className="flex justify-between mb-6 text-center">
-              <img src={logo} alt="COMCIN Logo" className="h-10 mb-4" />
+              <Link to={"/"}>
+                <img src={logo} alt="COMCIN Logo" className="h-10 mb-4" />
+              </Link>
 
               <p className="flex gap-3 text-base font-normal text-[#1E1E1E]">
                 Not a Member?
@@ -128,8 +131,8 @@ export default function Login() {
 
             <form
               onSubmit={handleSubmit(onSubmit)}
-
-              className=" w-full lg:w-2/3 border border-[#E9EEEA] rounded-md p-4 space-y-5">
+              className=" w-full lg:w-2/3 border border-[#E9EEEA] rounded-md p-4 space-y-5"
+            >
               <div>
                 <label className="block text-gray-700 text-sm font-bold mb-2">
                   Registration ID
@@ -182,7 +185,6 @@ export default function Login() {
                   Remember Me
                 </label>
               </div>
-
 
               <button
                 type="submit"

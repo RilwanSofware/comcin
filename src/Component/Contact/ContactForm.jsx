@@ -8,8 +8,36 @@ import {
 import { MdOutlineAttachEmail } from "react-icons/md";
 import { PiMapPinAreaLight } from "react-icons/pi";
 import { BiSupport } from "react-icons/bi";
+import { useForm } from "react-hook-form";
+import { useSendContactMutation } from "@/services/auth";
+import toast from "react-hot-toast";
 
 export default function ContactForm() {
+  const [sendContact, { isLoading }] = useSendContactMutation();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
+
+  const onSubmit = async (data) => {
+    const payload = {
+      code: 111111,
+      ...data,
+    };
+
+    try {
+      await sendContact(payload).unwrap();
+      toast.success("Message sent successfully!");
+      console.log("Form Data Submitted:", payload);
+      reset();
+    } catch (error) {
+      toast.error("Something went wrong!");
+      console.error(error);
+    }
+  };
+
   return (
     <div className="container mx-auto my-20 px-4 max-w-screen-lg">
       <div className="rounded-lg overflow-hidden grid md:grid-cols-2 shadow-lg">
@@ -87,7 +115,9 @@ export default function ContactForm() {
           <p className="text-gray-500 text-sm mb-6">
             Reach out to us and get a response in 24 hours!
           </p>
-          <form className="space-y-4">
+
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            {/* Full Name */}
             <div>
               <label className="block text-sm font-medium mb-1">
                 Full name
@@ -96,8 +126,18 @@ export default function ContactForm() {
                 type="text"
                 placeholder="Your Name"
                 className="w-full border rounded-md px-4 py-2 text-sm"
+                {...register("full_name", {
+                  required: "Full name is required",
+                })}
               />
+              {errors.full_name && (
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.full_name.message}
+                </p>
+              )}
             </div>
+
+            {/* Email */}
             <div>
               <label className="block text-sm font-medium mb-1">
                 Email Address
@@ -106,28 +146,59 @@ export default function ContactForm() {
                 type="email"
                 placeholder="you@example.com"
                 className="w-full border rounded-md px-4 py-2 text-sm"
+                {...register("email", {
+                  required: "Email is required",
+                  pattern: {
+                    value: /^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/,
+                    message: "Invalid email address",
+                  },
+                })}
               />
+              {errors.email && (
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
+
+            {/* Subject */}
             <div>
               <label className="block text-sm font-medium mb-1">Subject</label>
               <input
                 type="text"
-                placeholder="subject of your message"
+                placeholder="Subject of your message"
                 className="w-full border rounded-md px-4 py-2 text-sm"
+                {...register("subject", { required: "Subject is required" })}
               />
+              {errors.subject && (
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.subject.message}
+                </p>
+              )}
             </div>
+
+            {/* Message */}
             <div>
               <label className="block text-sm font-medium mb-1">Message</label>
               <textarea
                 placeholder="Write your message here..."
                 className="w-full border rounded-md px-4 py-2 text-sm h-28"
+                {...register("message", {
+                  required: "Message cannot be empty",
+                })}
               ></textarea>
+              {errors.message && (
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.message.message}
+                </p>
+              )}
             </div>
+
             <button
               type="submit"
               className="w-full bg-[#0A8625] text-white px-6 py-2 rounded-md hover:bg-green-700 transition-colors"
             >
-              Send Message
+              {isLoading ? "Sending..." : "Send Message"}
             </button>
           </form>
         </div>

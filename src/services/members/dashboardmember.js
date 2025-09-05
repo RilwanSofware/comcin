@@ -53,6 +53,13 @@ export const memberDashboardApi = createApi({
         body: data,
       }),
     }),
+    editMemberDashboard: builder.mutation({
+      query: (data) => ({
+        url: "/member/edit-institution/logo-banner",
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -64,6 +71,7 @@ export const {
   useGetMemberDashboardNotificationQuery,
   useGetMemberDashboardTicketsQuery,
   useCreateSupportMutation,
+  useEditMemberDashboardMutation,
   useGetMemberDashboardEditUserQuery,
-  useReadNotificationMutation
+  useReadNotificationMutation,
 } = memberDashboardApi;

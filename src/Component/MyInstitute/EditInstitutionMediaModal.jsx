@@ -1,20 +1,42 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { FiX, FiEdit3 } from "react-icons/fi";
 import { VscCloudUpload } from "react-icons/vsc";
 import category from "@/assets/neat.png";
 import profile from "@/assets/profile.png";
 import { MdOutlineCancelPresentation } from "react-icons/md";
+import { useEditMemberDashboardMutation } from "@/services/members/dashboardmember";
 
 export default function EditInstitutionMediaModal({ onClose }) {
+  const [editMemberDashboard] = useEditMemberDashboardMutation();
   const bannerInputRef = useRef(null);
   const categoryInputRef = useRef(null);
 
-  const handleBannerClick = () => {
-    bannerInputRef.current?.click();
-  };
+  const [bannerPreview, setBannerPreview] = useState(null);
+  const [categoryPreview, setCategoryPreview] = useState(null);
 
-  const handleCategoryClick = () => {
-    categoryInputRef.current?.click();
+  // Trigger file inputs
+  const handleBannerClick = () => bannerInputRef.current?.click();
+  const handleCategoryClick = () => categoryInputRef.current?.click();
+
+  // Handle file changes
+  const handleFileChange = async (file, type) => {
+    if (!file) return;
+
+    // Preview
+    const previewUrl = URL.createObjectURL(file);
+    if (type === "institution_banner") setBannerPreview(previewUrl);
+    if (type === "institution_logo") setCategoryPreview(previewUrl);
+
+    // Send to backend
+    const formData = new FormData();
+    formData.append(type, file);
+
+    try {
+      await editMemberDashboard(formData).unwrap();
+      console.log(`${type} uploaded successfully`);
+    } catch (error) {
+      console.error(`Error uploading ${type}:`, error);
+    }
   };
 
   return (
@@ -31,7 +53,7 @@ export default function EditInstitutionMediaModal({ onClose }) {
         {/* Banner */}
         <div className="w-full rounded overflow-hidden">
           <img
-            src={profile}
+            src={bannerPreview || profile} // fallback
             alt="Banner"
             className="w-full h-32 sm:h-40 object-cover rounded"
           />
@@ -40,7 +62,7 @@ export default function EditInstitutionMediaModal({ onClose }) {
         {/* Category image and Replace button */}
         <div className="inline-flex flex-col items-start gap-2 -mt-10 ml-6">
           <img
-            src={category}
+            src={categoryPreview || category} // fallback
             alt="Category Logo"
             className="w-20 h-20 rounded-full object-contain border-4 border-white bg-white"
           />
@@ -55,11 +77,9 @@ export default function EditInstitutionMediaModal({ onClose }) {
             type="file"
             accept="image/*"
             hidden
-            onChange={(e) => {
-              // Handle category image change
-              const file = e.target.files[0];
-              console.log("Category image selected:", file);
-            }}
+            onChange={(e) =>
+              handleFileChange(e.target.files?.[0], "institution_logo")
+            }
           />
         </div>
 
@@ -70,7 +90,8 @@ export default function EditInstitutionMediaModal({ onClose }) {
         >
           <VscCloudUpload />
           <p className="text-green-700 text-sm font-medium">
-            Add a banner <span className="text-gray-600 font-normal">or drag and drop</span>
+            Add a banner{" "}
+            <span className="text-gray-600 font-normal">or drag and drop</span>
           </p>
           <p className="text-xs text-gray-400 mt-1">
             Optimal dimensions 763 × 120px
@@ -80,11 +101,9 @@ export default function EditInstitutionMediaModal({ onClose }) {
             type="file"
             accept="image/*"
             hidden
-            onChange={(e) => {
-              // Handle banner image change
-              const file = e.target.files[0];
-              console.log("Banner image selected:", file);
-            }}
+            onChange={(e) =>
+              handleFileChange(e.target.files?.[0], "institution_banner")
+            }
           />
         </div>
       </div>
