@@ -6,7 +6,7 @@ const getToken = () => sessionStorage.getItem("token");
 export const adminDashboardApi = createApi({
   reducerPath: "adminDashboardApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://backend.comcin.com.ng/api/v1",
+    baseUrl: "https://backend.comcin.com.ng/api/v1",
     prepareHeaders: (headers) => {
       const token = getToken();
       // headers.set("Content-Type", "application/json");

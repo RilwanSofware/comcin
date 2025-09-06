@@ -29,11 +29,11 @@ export default function ContentManagement() {
 
   const tabs = [
     { label: "News & Announcements", value: "News", icon: <LuNewspaper /> },
-    {
-      label: "Testimonials",
-      value: "Testimonials",
-      icon: <TbQuote size={20} />,
-    },
+    // {
+    //   label: "Testimonials",
+    //   value: "Testimonials",
+    //   icon: <TbQuote size={20} />,
+    // },
     {
       label: "Support Management",
       value: "Support",
@@ -80,12 +80,12 @@ export default function ContentManagement() {
         </>
       )}
 
-      {activeTab === "Testimonials" && (
+      {/* {activeTab === "Testimonials" && (
         <>
           <TestimonialsCard testimonialData={testimonialData} />
           <TestimonialsTable testimonialData={testimonialData} />
         </>
-      )}
+      )} */}
 
       {activeTab === "Support" && (
         <>
