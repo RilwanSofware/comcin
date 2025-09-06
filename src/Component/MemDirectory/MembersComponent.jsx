@@ -1,8 +1,9 @@
 import { useGetMembersQuery } from "../../services/membersApi";
 import { IoFilter } from "react-icons/io5";
-import memberImage from "../../assets/member.png";
-import category from "../../assets/neat.png";
+import memberImage from "../../assets/green.png";
+import profile from "@/assets/empty_profile.jpeg";
 import { useState } from "react";
+import { IMAGE_URL } from "@/utils";
 
 export default function MembersComponent() {
   const { data, isLoading } = useGetMembersQuery();
@@ -73,7 +74,11 @@ export default function MembersComponent() {
               >
                 <div className="relative h-50 w-full p-2">
                   <img
-                    src={memberImage}
+                    src={
+                      member.institution_banner
+                        ? IMAGE_URL + member?.institution_banner
+                        : memberImage
+                    }
                     alt="group"
                     className="w-full h-full object-cover rounded-lg"
                     loading="lazy"
@@ -82,7 +87,7 @@ export default function MembersComponent() {
                     src={
                       member.institution_logo
                         ? `https://backend.comcin.com.ng/${member.institution_logo}`
-                        : memberImage
+                        : profile
                     }
                     alt="logo"
                     className="absolute -bottom-8 left-4 w-16 h-16 bg-white p-1 rounded-full border shadow-md z-10"
@@ -106,7 +111,7 @@ export default function MembersComponent() {
                     src={
                       member.institution_logo
                         ? `https://backend.comcin.com.ng/${member.institution_logo}`
-                        : memberImage
+                        : profile
                     }
                     alt="logo"
                     className="w-12 h-12 mb-2 bg-white p-1 rounded-full border shadow-md"

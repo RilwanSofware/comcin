@@ -5,9 +5,17 @@ import category from "@/assets/neat.png";
 import profile from "@/assets/profile.png";
 import { MdOutlineCancelPresentation } from "react-icons/md";
 import { useEditMemberDashboardMutation } from "@/services/members/dashboardmember";
+import toast from "react-hot-toast";
+import { CgSpinner } from "react-icons/cg";
 
-export default function EditInstitutionMediaModal({ onClose }) {
+export default function EditInstitutionMediaModal({
+  onClose,
+  logoImage,
+  coverImage,
+  refetch,
+}) {
   const [editMemberDashboard] = useEditMemberDashboardMutation();
+  const [isLoading, setIsLoading] = useState(false);
   const bannerInputRef = useRef(null);
   const categoryInputRef = useRef(null);
 
@@ -20,6 +28,7 @@ export default function EditInstitutionMediaModal({ onClose }) {
 
   // Handle file changes
   const handleFileChange = async (file, type) => {
+    setIsLoading(true);
     if (!file) return;
 
     // Preview
@@ -33,9 +42,16 @@ export default function EditInstitutionMediaModal({ onClose }) {
 
     try {
       await editMemberDashboard(formData).unwrap();
-      console.log(`${type} uploaded successfully`);
+      toast.success(
+        `${
+          type == "institution_logo" ? "Logo" : "Banner"
+        } uploaded successfully`
+      );
+      refetch();
     } catch (error) {
       console.error(`Error uploading ${type}:`, error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -53,7 +69,7 @@ export default function EditInstitutionMediaModal({ onClose }) {
         {/* Banner */}
         <div className="w-full rounded overflow-hidden">
           <img
-            src={bannerPreview || profile} // fallback
+            src={bannerPreview || coverImage} // fallback
             alt="Banner"
             className="w-full h-32 sm:h-40 object-cover rounded"
           />
@@ -62,8 +78,8 @@ export default function EditInstitutionMediaModal({ onClose }) {
         {/* Category image and Replace button */}
         <div className="inline-flex flex-col items-start gap-2 -mt-10 ml-6">
           <img
-            src={categoryPreview || category} // fallback
-            alt="Category Logo"
+            src={categoryPreview || logoImage} // fallback
+            alt="Logo"
             className="w-20 h-20 rounded-full object-contain border-4 border-white bg-white"
           />
           <button
@@ -88,7 +104,14 @@ export default function EditInstitutionMediaModal({ onClose }) {
           className="inline-flex flex-col mt-4 ml-24 items-center cursor-pointer"
           onClick={handleBannerClick}
         >
-          <VscCloudUpload />
+          {isLoading ? (
+            <span className="flex text-yellow-600 text-sm items-center space-x-4">
+              <CgSpinner size={25} className="rotate animate-spin" />{" "}
+              Uploading...
+            </span>
+          ) : (
+            <VscCloudUpload size={25} />
+          )}
           <p className="text-green-700 text-sm font-medium">
             Add a banner{" "}
             <span className="text-gray-600 font-normal">or drag and drop</span>

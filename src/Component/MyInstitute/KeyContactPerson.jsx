@@ -4,7 +4,7 @@ import CustomInput from "../CustomInput";
 import CustomFileUpload from "../CustomFileUpload";
 import { useForm } from "react-hook-form";
 
-export default function KeyContactPerson() {
+export default function KeyContactPerson({ data }) {
   const [showModal, setShowModal] = useState(false);
 
   const {
@@ -12,7 +12,11 @@ export default function KeyContactPerson() {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      fullName: "Joshua Clifford",
+    },
+  });
 
   const onSubmit = (data) => {
     console.log("Submitted Data:", data);
@@ -32,52 +36,52 @@ export default function KeyContactPerson() {
       </div>
 
       <form>
-        <CustomInput
-          label="Full Name"
-          name="fullName"
-          register={register}
-          required={true}
-          placeholder="Enter full name"
-          errors={errors}
-        />
-
-        <CustomInput
-          label="Position"
-          name="position"
-          register={register}
-          required={true}
-          placeholder="e.g. Managing Director"
-          errors={errors}
-        />
-
-        <CustomInput
-          label="Official Email"
-          name="email"
-          type="email"
-          register={register}
-          required={true}
-          placeholder="e.g. contact@institution.com"
-          errors={errors}
-        />
-        <CustomInput
-          label="ID Card Type"
-          name="address"
-          register={register}
-          required={true}
-          placeholder="Full address"
-          errors={errors}
-        />
-
-        <CustomInput
-          label="Phone Number"
-          name="phone"
-          type="tel"
-          register={register}
-          required={true}
-          placeholder="+234 801 234 5678"
-          errors={errors}
-        />
-        
+        <div className="mb-2">
+          <label className="block text-sm text-gray-700 mb-1">Full Name</label>
+          <input
+            className="border border-[#E9E9E9] outline-none rounded px-3 py-2 text-sm w-full"
+            value={data?.user?.name || ""}
+            readOnly
+          />
+        </div>
+        <div className="mb-2">
+          <label className="block text-sm text-gray-700 mb-1">Position</label>
+          <input
+            className="border border-[#E9E9E9] outline-none rounded px-3 py-2 text-sm w-full"
+            value={data?.user?.designation || ""}
+            readOnly
+          />
+        </div>
+        <div className="mb-2">
+          <label className="block text-sm text-gray-700 mb-1">
+            Official Email
+          </label>
+          <input
+            className="border border-[#E9E9E9] outline-none rounded px-3 py-2 text-sm w-full"
+            value={data?.user?.email || ""}
+            readOnly
+          />
+        </div>
+        <div className="mb-2">
+          <label className="block text-sm text-gray-700 mb-1">
+            ID Card Type
+          </label>
+          <input
+            className="border border-[#E9E9E9] outline-none rounded px-3 py-2 text-sm w-full"
+            value={data?.user?.id_card || "N/A"}
+            readOnly
+          />
+        </div>
+        <div className="mb-2">
+          <label className="block text-sm text-gray-700 mb-1">
+            Phone Number
+          </label>
+          <input
+            className="border border-[#E9E9E9] outline-none rounded px-3 py-2 text-sm w-full"
+            value={data?.user?.phone_number || "N/A"}
+            readOnly
+          />
+        </div>
       </form>
       {showModal && (
         <KeyContactPersonModal onClose={() => setShowModal(false)} />

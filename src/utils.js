@@ -20,3 +20,5 @@ export const scrollToTop = () => {
     behavior: "smooth", // "auto" if you don’t want animation
   });
 };
+
+export const IMAGE_URL = "https://backend.comcin.com.ng/";

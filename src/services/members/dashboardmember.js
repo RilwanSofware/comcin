@@ -60,6 +60,13 @@ export const memberDashboardApi = createApi({
         body: data,
       }),
     }),
+    editProfileDashboard: builder.mutation({
+      query: (data) => ({
+        url: "/member/edit-profile",
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -74,4 +81,5 @@ export const {
   useEditMemberDashboardMutation,
   useGetMemberDashboardEditUserQuery,
   useReadNotificationMutation,
+  useEditProfileDashboardMutation,
 } = memberDashboardApi;

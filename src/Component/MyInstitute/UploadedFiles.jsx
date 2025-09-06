@@ -17,8 +17,6 @@ export default function UploadedFiles({ files }) {
     { label: "Other Supporting Document", key: "other_supporting_document" },
   ];
 
-  console.log(files);
-
   return (
     <div className="bg-white rounded-lg">
       <div className="px-6 py-2 border-b border-[#E9EEEA] ">

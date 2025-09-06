@@ -3,13 +3,15 @@ import { useForm } from "react-hook-form";
 import { BsPatchCheck, BsBookmarkDash } from "react-icons/bs";
 import { FaRegTimesCircle } from "react-icons/fa";
 import { MdOutlineCancelPresentation } from "react-icons/md";
-import coverImage from "@/assets/profile.png";
+import coverImage from "@/assets/green.png";
+import profile from "@/assets/empty_profile.jpeg";
 import {
   useGetAdminSingleApplicationQuery,
   useApproveRequestMutation,
 } from "@/services/admin-dashboard/dashboard";
 import RejectForm from "./RejectForm";
 import toast from "react-hot-toast";
+import { IMAGE_URL } from "@/utils";
 
 export default function ApplicationModal({
   onClose,
@@ -79,8 +81,6 @@ export default function ApplicationModal({
     }
   };
 
-  // console.log(initialData);
-
   return (
     <div className="fixed inset-0 z-50 bg-black bg-opacity-30 flex justify-center items-center px-4">
       <div className="bg-white rounded-2xl border border-[#E9EEEA] w-full max-w-2xl max-h-[90vh] overflow-y-auto p-4 relative shadow-lg">
@@ -105,7 +105,11 @@ export default function ApplicationModal({
             {/* Cover Image */}
             <div className="w-full h-40">
               <img
-                src={coverImage}
+                src={
+                  initialData?.institution_banner
+                    ? IMAGE_URL + initialData?.institution_banner
+                    : coverImage
+                }
                 alt="Cover"
                 className="w-full h-full object-cover"
               />
@@ -114,7 +118,11 @@ export default function ApplicationModal({
             {/* Logo + Details */}
             <div className="flex items-start gap-4 p-4">
               <img
-                src={coverImage}
+                src={
+                  initialData?.institution_logo
+                    ? IMAGE_URL + initialData?.institution_logo
+                    : profile
+                }
                 alt="Category Logo"
                 className="w-20 h-20 object-contain rounded-full border-4 border-white bg-white -mt-10"
               />

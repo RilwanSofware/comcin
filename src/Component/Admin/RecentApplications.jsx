@@ -1,7 +1,15 @@
+import { useState } from "react";
+import ApplicationModal from "./Membership/ApplicationModal";
+
 // components/RecentApplications.jsx
 export default function RecentApplications({ recent }) {
- 
+  const [showModal, setShowModal] = useState(false);
+  const [selectedApplication, setSelectedApplication] = useState(null);
 
+  const handleApplicationModal = (item) => {
+    setSelectedApplication(item);
+    setShowModal(true);
+  };
   return (
     <div className="bg-white rounded-lg pb-2">
       <div className="flex border-b p-4 justify-between items-center">
@@ -60,7 +68,10 @@ export default function RecentApplications({ recent }) {
                 })}
               </td>
               <td className="px-4 py-3">
-                <button className="text-green-600 text-sm hover:underline">
+                <button
+                  onClick={() => handleApplicationModal(item)}
+                  className="text-green-600 text-sm hover:underline"
+                >
                   Review
                 </button>
               </td>
@@ -68,6 +79,14 @@ export default function RecentApplications({ recent }) {
           ))}
         </tbody>
       </table>
+      {showModal && (
+        <ApplicationModal
+          onClose={() => setShowModal(false)}
+          initialData={selectedApplication}
+          refetch={() => {}}
+          canUpdate={selectedApplication?.status !== "approved"}
+        />
+      )}
     </div>
   );
 }

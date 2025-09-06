@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import profile from "@/assets/profile.png";
-import category from "@/assets/neat.png";
+import profile from "@/assets/green.png";
+import category from "@/assets/empty_profile.jpeg";
 import { FiEdit3 } from "react-icons/fi";
 import EditInstitutionMediaModal from "@/Component/MyInstitute/EditInstitutionMediaModal";
+import { IMAGE_URL } from "@/utils";
 
 export default function InstitutionProfile({ personalInfo, refetch }) {
   const [showModal, setShowModal] = useState(false);
@@ -10,8 +11,12 @@ export default function InstitutionProfile({ personalInfo, refetch }) {
   const institution = personalInfo?.user?.institution;
 
   // Fallbacks
-  const coverImage = profile;
-  const logoImage = institution?.institution_logo || category;
+  const coverImage = institution?.institution_banner
+    ? IMAGE_URL + institution?.institution_banner
+    : profile;
+  const logoImage = institution?.institution_logo
+    ? IMAGE_URL + institution?.institution_logo
+    : category;
 
   return (
     <>
@@ -62,7 +67,12 @@ export default function InstitutionProfile({ personalInfo, refetch }) {
       </div>
 
       {showModal && (
-        <EditInstitutionMediaModal refetch={refetch} onClose={() => setShowModal(false)} />
+        <EditInstitutionMediaModal
+          refetch={refetch}
+          coverImage={coverImage}
+          logoImage={logoImage}
+          onClose={() => setShowModal(false)}
+        />
       )}
     </>
   );
