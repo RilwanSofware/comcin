@@ -2,7 +2,46 @@ import React, { useState } from "react";
 import { BsShieldLock } from "react-icons/bs";
 import CustomInput from "../CustomInput";
 
-const states = ["Lagos", "Abuja", "Kano", "Enugu", "Oyo", "Kaduna"]; // Example
+const states = [
+  "Abia",
+  "Adamawa",
+  "Akwa Ibom",
+  "Anambra",
+  "Bauchi",
+  "Bayelsa",
+  "Benue",
+  "Borno",
+  "Cross River",
+  "Delta",
+  "Ebonyi",
+  "Edo",
+  "Ekiti",
+  "Enugu",
+  "Gombe",
+  "Imo",
+  "Jigawa",
+  "Kaduna",
+  "Kano",
+  "Katsina",
+  "Kebbi",
+  "Kogi",
+  "Kwara",
+  "Lagos",
+  "Nasarawa",
+  "Niger",
+  "Ogun",
+  "Ondo",
+  "Osun",
+  "Oyo",
+  "Plateau",
+  "Rivers",
+  "Sokoto",
+  "Taraba",
+  "Yobe",
+  "Zamfara",
+  "Federal Capital Territory (Abuja)",
+];
+
 
 export default function StepOne({ register, errors, watch }) {
   const [charCount, setCharCount] = useState(0);

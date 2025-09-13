@@ -33,7 +33,7 @@ export default function ContactCard() {
         <div className="flex items-center space-x-3 p-6">
           <BiSupport className="bg-[#B3D9BB3D] rounded-md p-1 text-white text-3xl" />
           <span className="text-base font-normal">
-            Phone: +234 800 000 0000
+            Phone: +234 701 1142 464
           </span>
         </div>
         <div className="flex items-center space-x-3 p-6">

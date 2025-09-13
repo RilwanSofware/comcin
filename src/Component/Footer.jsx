@@ -110,7 +110,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <LuPhone />
-                +234 1 234 5678
+                +234 701 1142 464
               </li>
               <li className="flex items-center gap-2">
                 <FiMapPin />
