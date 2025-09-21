@@ -12,6 +12,7 @@ import {
 import RejectForm from "./RejectForm";
 import toast from "react-hot-toast";
 import { IMAGE_URL } from "@/utils";
+import UploadedFiles from "@/Component/MyInstitute/UploadedFiles";
 
 export default function ApplicationModal({
   onClose,
@@ -350,11 +351,11 @@ export default function ApplicationModal({
               </label>
               <input
                 className="border border-[#E9E9E9] outline-none rounded px-3 py-2 text-sm w-full"
-                value={initialData?.institution_type || ""}
+                value={initialData?.user?.name || ""}
                 readOnly
               />
             </div>
-            <div>
+            {/* <div>
               <label className="block text-sm text-gray-700 mb-1">
                 Position
               </label>
@@ -363,7 +364,7 @@ export default function ApplicationModal({
                 value={initialData?.institution_type || ""}
                 readOnly
               />
-            </div>
+            </div> */}
 
             <div>
               <label className="block text-sm text-gray-700 mb-1">
@@ -381,12 +382,12 @@ export default function ApplicationModal({
               </label>
               <input
                 className="border border-[#E9E9E9] outline-none rounded px-3 py-2 text-sm w-full"
-                value={initialData?.institution_type || ""}
+                value={initialData?.phone_number || ""}
                 readOnly
               />
             </div>
           </div>
-
+          <UploadedFiles files={initialData} />
           {/* Buttons */}
           {canUpdate && (
             <div className="flex justify-end gap-4 pt-4">
