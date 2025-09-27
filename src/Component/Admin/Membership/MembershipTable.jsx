@@ -16,7 +16,7 @@ export default function MembershipTable({ data, refetch }) {
   const [selectedApplication, setSelectedApplication] = useState(null);
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 3;
+  const itemsPerPage = 10;
 
   // Filter states
   const [searchTerm, setSearchTerm] = useState("");
