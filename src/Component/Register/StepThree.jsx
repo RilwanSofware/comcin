@@ -4,6 +4,32 @@ import { BsShieldLock } from "react-icons/bs";
 import CustomInput from "../CustomInput";
 
 export default function StepThree({ register, errors, watch }) {
+  const certificate_of_registration = watch("certificate_of_registration");
+  const cof = certificate_of_registration?.[0];
+
+  const operational_license = watch("operational_license");
+  const ol = operational_license?.[0];
+
+  const constitution = watch("constitution");
+  const c = constitution?.[0];
+
+  const latest_annual_report = watch("latest_annual_report");
+  const lar = latest_annual_report?.[0];
+
+  const letter_of_intent = watch("letter_of_intent");
+  const loi = letter_of_intent?.[0];
+
+  const board_resolution = watch("board_resolution");
+  const brr = board_resolution?.[0];
+
+  const passport_photograph = watch("passport_photograph");
+  const pp = passport_photograph?.[0];
+
+  const other_supporting_document = watch("other_supporting_document");
+  const osd = other_supporting_document?.[0];
+
+  const payment_receipt = watch("payment_receipt");
+  const pr = payment_receipt?.[0];
   return (
     <>
       <div className="flex flex-col gap-2">
@@ -31,6 +57,13 @@ export default function StepThree({ register, errors, watch }) {
         register={register}
         required={true}
         errors={errors}
+        preview={
+          certificate_of_registration && certificate_of_registration.length > 0
+            ? URL.createObjectURL(certificate_of_registration[0])
+            : null
+        }
+        fileType={cof ? cof.type : null}
+        fileName={cof ? cof.name : null}
       />
 
       <CustomFileUpload
@@ -39,6 +72,13 @@ export default function StepThree({ register, errors, watch }) {
         register={register}
         required={true}
         errors={errors}
+        preview={
+          operational_license && operational_license.length > 0
+            ? URL.createObjectURL(operational_license[0])
+            : null
+        }
+        fileType={ol ? ol.type : null}
+        fileName={ol ? ol.name : null}
       />
 
       <CustomFileUpload
@@ -47,6 +87,13 @@ export default function StepThree({ register, errors, watch }) {
         register={register}
         required={false}
         errors={errors}
+        preview={
+          constitution && constitution.length > 0
+            ? URL.createObjectURL(constitution[0])
+            : null
+        }
+        fileType={c ? c.type : null}
+        fileName={c ? c.name : null}
       />
 
       <CustomFileUpload
@@ -55,6 +102,13 @@ export default function StepThree({ register, errors, watch }) {
         register={register}
         required={false}
         errors={errors}
+        preview={
+          latest_annual_report && latest_annual_report.length > 0
+            ? URL.createObjectURL(latest_annual_report[0])
+            : null
+        }
+        fileType={lar ? lar.type : null}
+        fileName={lar ? lar.name : null}
       />
 
       <div className="relative">
@@ -64,6 +118,13 @@ export default function StepThree({ register, errors, watch }) {
           register={register}
           required={false}
           errors={errors}
+          preview={
+            letter_of_intent && letter_of_intent.length > 0
+              ? URL.createObjectURL(letter_of_intent[0])
+              : null
+          }
+          fileType={loi ? loi.type : null}
+          fileName={loi ? loi.name : null}
         />
         <p className="text-right text-sm italic text-gray-500">
           On letterhead and signed by a top executive
@@ -76,6 +137,13 @@ export default function StepThree({ register, errors, watch }) {
         register={register}
         required={false}
         errors={errors}
+        preview={
+          board_resolution && board_resolution.length > 0
+            ? URL.createObjectURL(board_resolution[0])
+            : null
+        }
+        fileType={brr ? brr.type : null}
+        fileName={brr ? brr.name : null}
       />
 
       <CustomFileUpload
@@ -84,6 +152,13 @@ export default function StepThree({ register, errors, watch }) {
         register={register}
         required={false}
         errors={errors}
+        preview={
+          passport_photograph && passport_photograph.length > 0
+            ? URL.createObjectURL(passport_photograph[0])
+            : null
+        }
+        fileType={pp ? pp.type : null}
+        fileName={pp ? pp.name : null}
       />
 
       <CustomFileUpload
@@ -92,6 +167,13 @@ export default function StepThree({ register, errors, watch }) {
         register={register}
         required={false}
         errors={errors}
+        preview={
+          other_supporting_document && other_supporting_document.length > 0
+            ? URL.createObjectURL(other_supporting_document[0])
+            : null
+        }
+        fileType={osd ? osd.type : null}
+        fileName={osd ? osd.name : null}
       />
 
       {/* Bank details section */}
@@ -121,6 +203,13 @@ export default function StepThree({ register, errors, watch }) {
         register={register}
         required={true}
         errors={errors}
+        preview={
+          payment_receipt && payment_receipt.length > 0
+            ? URL.createObjectURL(payment_receipt[0])
+            : null
+        }
+        fileType={pr ? pr.type : null}
+        fileName={pr ? pr.name : null}
       />
 
       {/* Category Type */}

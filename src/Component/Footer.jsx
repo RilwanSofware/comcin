@@ -114,7 +114,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <FiMapPin />
-                info@comcin.org
+                info@comcin.com.ng
               </li>
             </ul>
           </div>

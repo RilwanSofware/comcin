@@ -41,6 +41,7 @@ export default function Register() {
     handleSubmit,
     getFieldState,
     watch,
+    getValues,
     formState: { errors },
   } = useForm();
 

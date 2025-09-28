@@ -3,7 +3,10 @@ import CustomInput from "../CustomInput";
 import CustomFileUpload from "../CustomFileUpload";
 import { BsShieldLock } from "react-icons/bs";
 
-export default function StepTwo({ register, errors }) {
+export default function StepTwo({ register, errors, watch }) {
+  const idCardFiles = watch("id_card");
+  const file = idCardFiles?.[0];
+
   return (
     <>
       <div className="flex flex-col gap-2">
@@ -71,6 +74,13 @@ export default function StepTwo({ register, errors }) {
         register={register}
         required={true}
         errors={errors}
+        preview={
+          idCardFiles && idCardFiles.length > 0
+            ? URL.createObjectURL(idCardFiles[0])
+            : null
+        }
+        fileType={file ? file.type : null}
+        fileName={file ? file.name : null}
       />
     </>
   );

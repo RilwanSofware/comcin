@@ -1,4 +1,5 @@
 import React from "react";
+import { FiFileText } from "react-icons/fi";
 import { SlCloudUpload } from "react-icons/sl";
 
 export default function CustomFileUpload({
@@ -9,6 +10,8 @@ export default function CustomFileUpload({
   accept = ".jpg,.jpeg,.png,.pdf",
   errors,
   preview,
+  fileType,
+  fileName,
 }) {
   return (
     <div className="mb-4">
@@ -26,13 +29,22 @@ export default function CustomFileUpload({
             <p className="text-xs text-gray-400">PDF, JPG, PNG up to 10MB</p>
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center space-y-2">
-            <img
-              src={preview}
-              alt="Preview"
-              style={{ width: "200px", borderRadius: "8px" }}
-            />
-          </div>
+          <>
+            {fileType.startsWith("image/") ? (
+              <div className="flex flex-col items-center justify-center space-y-2">
+                <img
+                  src={preview}
+                  alt="Preview"
+                  style={{ width: "200px", borderRadius: "8px" }}
+                />
+              </div>
+            ) : (
+              <div className="flex items-center space-x-2 text-red-600">
+                <FiFileText size={40} />
+                <span>{fileName}</span>
+              </div>
+            )}
+          </>
         )}
         <input
           type="file"
