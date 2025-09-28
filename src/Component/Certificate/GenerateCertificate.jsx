@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from "react";
-import certificateTemplate from "../../assets/certificates.jpeg";
+import certificateTemplate from "../../assets/Certificate.png";
 import html2canvas from "html2canvas";
 import { set } from "react-hook-form";
 import { ImSpinner } from "react-icons/im";
